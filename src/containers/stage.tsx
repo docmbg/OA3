@@ -9,7 +9,7 @@ class Stage extends React.Component<any, any> {
             );
         }
         return (
-            <div> Current Active Stage: {this.props.stage}</div>
+            <div> Current Active Stage is: {this.props.stage}</div>
         );
     }
 }
