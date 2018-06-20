@@ -1,3 +1,5 @@
+import { read } from "fs";
+
 export async function getAllSubSites(url: string, arr: Array<String>, mainUrl: string, options: any) {
     let promises: any = [];
     let fetchUrl = url !== mainUrl ? url : `${mainUrl}/_api/Web/webs`;
@@ -91,8 +93,108 @@ export async function getEmptyFolders(siteUrl: string, readOptions: any, request
     return emptyFolders;
 }
 
-export function getMainUrl(param: string) {
-  let urlParts = window.location.href.split(`${param}/`);
-  let result = `${urlParts[0]}${param}/${urlParts[1].split('/')[0]}`;
-  return result;
+export async function getAllGroups(url: string, readOptions: any) {
+    let groups = await fetch(`${url}/_api/web/roleassignments/groups`, readOptions)
+        .then(res => res.json())
+        .then(res => res.d.results);
+    return groups;
 }
+
+export async function getCurrenUserGroups(url: string, readOptions: any, userId: number) {
+    let groups = await fetch(`${url}/_api/web/GetUserById(${userId})/grousp`, readOptions)
+        .then(res => res.json())
+        .then(res => res.d.results);
+    return groups;
+}
+
+export async function addRemoveUserToGroup(url: string, groupId: number, postOptions: any, user: any, operation: string) {
+    let body;
+    let complete;
+    if (operation === 'add') {
+        body = JSON.stringify({
+            '__metadata': { 'type': 'SP.User' },
+            'LoginName': user.LoginName
+        });
+        postOptions.body = body;
+        complete = fetch(`${url}_api/Web/sitegroups(${groupId})/users`, postOptions)
+            .then(res => res.json())
+            .then(res => complete = true);
+    }
+    else if (operation === 'remove') {
+        complete = fetch(`${url}_api/Web/sitegroups(${groupId})/users/removebyid(${user.Id})`, postOptions)
+            .then(res => res.json())
+            .then(res => complete = true);
+    }
+    return complete;
+}
+
+export async function getWorkflows(sites: Array<string>, readOptions: any) {
+    let promises = [];
+    let workflowsLists: any = [];
+    let workflows: any = [];
+    for (let site of sites) {
+        promises.push(fetch(`${site}/_api/web/Lists/getByTitle('Workflows')`, readOptions)
+            .then(res => res.json()).
+            then(res => workflowsLists.push(res))
+        )
+    }
+    await Promise.all(promises);
+    workflowsLists = workflowsLists.filter((e: Object) => !e.hasOwnProperty('error'));
+    promises = [];
+    for (let list of workflowsLists) {
+        for (let i = 1; i <= list.d.ItemCount; i++) {
+            promises.push(fetch(`${list.d.Items.__deferred.uri}(${i})/File`, readOptions)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.d.File === undefined && res.d.Name.includes('.xsn')) { //res.File = null when file is empty
+                        return Promise.resolve(getAuthor(res.d.Author.__deferred.uri, readOptions))
+                            .then(author => {
+                                workflows.push({
+                                    'Author': author,
+                                    'Name': res.d.Name.split('.xsn')[0],
+                                    'Server Relatvive Url': res.d.ServerRelativeUrl
+                                })
+                            });
+                    } else {
+                        return;
+                    }
+                })
+            )
+            // e.g.https://dxcportal.sharepoint.com/sites/HPI-Account/AGov/_api/Web/
+            // Lists(guid'ecf90f23-4b10-4cb7-ae0f-b2c28f7da237')/Items(3)/File
+        }
+    }
+    await Promise.all(promises);
+    return workflows;
+
+}
+
+// export async function getVersioning(lists: Array<object>, readOptions: any) {
+//     let promises = [];
+//     let rootFolders:any = [];
+//     for (let list of lists) {
+//         promises.push(fetch(list[`RootFolder`].__deferred.uri, readOptions)
+//             .then(res => res.json()).then(res => rootFolders.push(res.d.Properties.__deferred.uri))
+//         )
+//     }
+//     await Promise.all(promises);
+//     promises = [];
+//     for(let folder of rootFolders){
+
+//     }
+
+// }
+
+async function getAuthor(url: string, readOptions: any) {
+    let author = await fetch(url, readOptions)
+        .then(res => res.json())
+        .then(res => res.d.Email);
+    return author;
+}
+
+export function getMainUrl(param: string) {
+    let urlParts = window.location.href.split(`${param}/`);
+    let result = `${urlParts[0]}${param}/${urlParts[1].split('/')[0]}`;
+    return result;
+}
+
