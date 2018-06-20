@@ -1,5 +1,3 @@
-import { read } from "fs";
-
 export async function getAllSubSites(url: string, arr: Array<String>, mainUrl: string, options: any) {
     let promises: any = [];
     let fetchUrl = url !== mainUrl ? url : `${mainUrl}/_api/Web/webs`;
