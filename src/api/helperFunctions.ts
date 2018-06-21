@@ -105,7 +105,14 @@ export async function getCurrenUserGroups(url: string, readOptions: any, userId:
     return groups;
 }
 
-export async function addRemoveUserToGroup(url: string, groupId: number, postOptions: any, user: any, operation: string) {
+export async function addRemoveUserToGroup
+    (
+    url: string,
+    groupId: number,
+    postOptions: any,
+    user: any,
+    operation: string
+    ) {
     let body;
     let complete;
     if (operation === 'add') {
@@ -117,8 +124,7 @@ export async function addRemoveUserToGroup(url: string, groupId: number, postOpt
         complete = fetch(`${url}_api/Web/sitegroups(${groupId})/users`, postOptions)
             .then(res => res.json())
             .then(res => complete = true);
-    }
-    else if (operation === 'remove') {
+    } else if (operation === 'remove') {
         complete = fetch(`${url}_api/Web/sitegroups(${groupId})/users/removebyid(${user.Id})`, postOptions)
             .then(res => res.json())
             .then(res => complete = true);
@@ -134,7 +140,7 @@ export async function getWorkflows(sites: Array<string>, readOptions: any) {
         promises.push(fetch(`${site}/_api/web/Lists/getByTitle('Workflows')`, readOptions)
             .then(res => res.json()).
             then(res => workflowsLists.push(res))
-        )
+        );
     }
     await Promise.all(promises);
     workflowsLists = workflowsLists.filter((e: Object) => !e.hasOwnProperty('error'));
@@ -144,20 +150,21 @@ export async function getWorkflows(sites: Array<string>, readOptions: any) {
             promises.push(fetch(`${list.d.Items.__deferred.uri}(${i})/File`, readOptions)
                 .then(res => res.json())
                 .then(res => {
-                    if (res.d.File === undefined && res.d.Name.includes('.xsn')) { //res.File = null when file is empty
+                    if (res.d.File === undefined && res.d.Name.includes('.xsn')) { 
+                        // res.File = null when file is empty
                         return Promise.resolve(getAuthor(res.d.Author.__deferred.uri, readOptions))
                             .then(author => {
                                 workflows.push({
                                     'Author': author,
                                     'Name': res.d.Name.split('.xsn')[0],
                                     'Server Relatvive Url': res.d.ServerRelativeUrl
-                                })
+                                });
                             });
                     } else {
                         return;
                     }
                 })
-            )
+            );
             // e.g.https://dxcportal.sharepoint.com/sites/HPI-Account/AGov/_api/Web/
             // Lists(guid'ecf90f23-4b10-4cb7-ae0f-b2c28f7da237')/Items(3)/File
         }
@@ -167,16 +174,16 @@ export async function getWorkflows(sites: Array<string>, readOptions: any) {
 
 }
 
-export async function getVersioning(mainUrl:string,lists:any) {
-    let flatLists = [].concat.apply([],lists);
+export async function getVersioning(mainUrl: string, lists: any) {
+    let flatLists = [].concat.apply([], lists);
     let checkedLists = [];
-    for (let list of flatLists){
+    for (let list of flatLists) {
         checkedLists.push({
             'Name': list[`Title`],
-            'Url': `${mainUrl}/${list['EntityTypeName']}`,
-            'Enabled Versioning': list['EnableVersioning'],
-            'Enabled Minor Versions': list['EnableMinorVersions']
-        })
+            'Url': `${mainUrl}/${list[`EntityTypeName`]}`,
+            'Enabled Versioning': list[`EnableVersioning`],
+            'Enabled Minor Versions': list[`EnableMinorVersions`]
+        });
     }
     return checkedLists;
 }
@@ -199,5 +206,3 @@ export function getMainUrl(param: string) {
     let result = `${urlParts[0]}${param}/${urlParts[1].split('/')[0]}`;
     return result;
 }
-
-
