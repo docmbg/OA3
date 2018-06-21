@@ -14,8 +14,8 @@ export async function getAllSubSites(url: string, arr: Array<String>, mainUrl: s
 }
 
 export async function getFolderUrisRecursive(guid: string, options: any) {
-    const view = `ServerRelativeUrl&@v1={"ViewXml":"<View Scope='RecursiveAll'>` +
-        `<Query><Where><Eq><FieldRef Name='FSObjType' /><Value Type='Integer'>1</Value></Eq></Where></Query></View>"}`;
+    const view = `ServerRelativeUrl&@v1={'ViewXml':'<View Scope='RecursiveAll'>` +
+        `<Query><Where><Eq><FieldRef Name='FSObjType' /><Value Type='Integer'>1</Value></Eq></Where></Query></View>'}`;
     let folderURIs = await fetch(
         `${guid}/GetItems(query=@v1)?$expand=Folder/` + `${view}`,
         options
@@ -150,7 +150,7 @@ export async function getWorkflows(sites: Array<string>, readOptions: any) {
             promises.push(fetch(`${list.d.Items.__deferred.uri}(${i})/File`, readOptions)
                 .then(res => res.json())
                 .then(res => {
-                    if (res.d.File === undefined && res.d.Name.includes('.xsn')) { 
+                    if (res.d.File === undefined && res.d.Name.includes('.xsn')) {
                         // res.File = null when file is empty
                         return Promise.resolve(getAuthor(res.d.Author.__deferred.uri, readOptions))
                             .then(author => {
@@ -190,7 +190,7 @@ export async function getVersioning(mainUrl: string, lists: any) {
 
 export default function deleteFolder(url: string, postOptions: any, mainUrl: string) {
     postOptions.headers[`X-HTTP-Method`] = 'DELETE';
-    return fetch(`${mainUrl}_api/web/GetFolderByServerRelativeUrl(${url})`, postOptions)
+    return fetch(`${mainUrl}/_api/web/GetFolderByServerRelativeUrl(${url})`, postOptions)
         .then(res => res.text()).then(res => res);
 }
 
@@ -205,4 +205,16 @@ export function getMainUrl(param: string) {
     let urlParts = window.location.href.split(`${param}/`);
     let result = `${urlParts[0]}${param}/${urlParts[1].split('/')[0]}`;
     return result;
+}
+
+export async function updateDigest(url: string) {
+    let digest = await fetch(`${url}/_api/contextinfo`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Accept': 'application/json; odata=verbose' },
+    })
+        .then(res => res.json())
+        .then(res => res.d.GetContextWebInformation.FormDigestValue);
+
+    return digest;
 }
