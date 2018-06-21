@@ -181,6 +181,12 @@ export async function getVersioning(mainUrl:string,lists:any) {
     return checkedLists;
 }
 
+export default function deleteFolder(url: string, postOptions: any, mainUrl: string) {
+    postOptions.headers[`X-HTTP-Method`] = 'DELETE';
+    return fetch(`${mainUrl}_api/web/GetFolderByServerRelativeUrl(${url})`, postOptions)
+        .then(res => res.text()).then(res => res);
+}
+
 async function getAuthor(url: string, readOptions: any) {
     let author = await fetch(url, readOptions)
         .then(res => res.json())
@@ -193,4 +199,5 @@ export function getMainUrl(param: string) {
     let result = `${urlParts[0]}${param}/${urlParts[1].split('/')[0]}`;
     return result;
 }
+
 
