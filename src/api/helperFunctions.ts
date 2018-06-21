@@ -167,21 +167,19 @@ export async function getWorkflows(sites: Array<string>, readOptions: any) {
 
 }
 
-// export async function getVersioning(lists: Array<object>, readOptions: any) {
-//     let promises = [];
-//     let rootFolders:any = [];
-//     for (let list of lists) {
-//         promises.push(fetch(list[`RootFolder`].__deferred.uri, readOptions)
-//             .then(res => res.json()).then(res => rootFolders.push(res.d.Properties.__deferred.uri))
-//         )
-//     }
-//     await Promise.all(promises);
-//     promises = [];
-//     for(let folder of rootFolders){
-
-//     }
-
-// }
+export async function getVersioning(mainUrl:string,lists:any) {
+    let flatLists = [].concat.apply([],lists);
+    let checkedLists = [];
+    for (let list of flatLists){
+        checkedLists.push({
+            'Name': list[`Title`],
+            'Url': `${mainUrl}/${list['EntityTypeName']}`,
+            'Enabled Versioning': list['EnableVersioning'],
+            'Enabled Minor Versions': list['EnableMinorVersions']
+        })
+    }
+    return checkedLists;
+}
 
 async function getAuthor(url: string, readOptions: any) {
     let author = await fetch(url, readOptions)
