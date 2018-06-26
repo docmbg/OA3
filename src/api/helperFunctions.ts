@@ -98,8 +98,8 @@ export async function getAllGroups(url: string, readOptions: any) {
     return groups;
 }
 
-export async function getCurrenUserGroups(url: string, readOptions: any, userId: number) {
-    let groups = await fetch(`${url}/_api/web/GetUserById(${userId})/grousp`, readOptions)
+export async function helper_getCurrenUserGroups(url: string, readOptions: any, userId: number) {
+    let groups = await fetch(`${url}/_api/web/GetUserById(${userId})/groups`, readOptions)
         .then(res => res.json())
         .then(res => res.d.results);
     return groups;

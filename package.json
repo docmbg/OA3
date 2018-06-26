@@ -5,7 +5,10 @@
   "homepage": "../",
   "dependencies": {
     "@types/history": "^4.6.2",
+    "@types/react-redux": "^6.0.2",
     "@types/react-router": "^4.0.23",
+    "@types/redux": "^3.6.0",
+    "connected-react-router": "^4.3.0",
     "gojs": "^1.8.21",
     "node-sass-chokidar": "^1.1.2",
     "npm-run-all": "^4.1.2",
@@ -16,6 +19,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "2.14.0",
     "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
     "xlsx-populate": "^1.17.0"
   },
   "scripts": {

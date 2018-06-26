@@ -1,26 +1,26 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { getAllUsers } from '../actions/get_users';
-import { siteUrl } from '../consts';
-import { updateDigest } from '../api/helperFunctions';
+import Navigation from './navigation';
 
 class AllUsers extends React.Component<any, any> {
     getUsers() {
-        let that = this;
-        Promise.resolve(updateDigest(siteUrl))
-            .then(res => that.props.getAllUsers(res));
+        // call excel generation func with this.props.users;
     }
 
     render() {
         return (
-            <button onClick={() => this.getUsers()}>Get All Users </button>
+            <div>
+                <Navigation />
+                <button onClick={() => this.getUsers()}>Get All Users </button>
+            </div>
         );
     }
 }
 
-function mapDispatchToProps(dispatch: any) {
-    return bindActionCreators({ getAllUsers }, dispatch);
+function mapStateToProps({ users }: any) {
+    return {
+        users
+    };
 }
 
-export default connect(null, mapDispatchToProps)(AllUsers);
+export default connect(mapStateToProps)(AllUsers);

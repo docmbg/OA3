@@ -1,4 +1,4 @@
-import { getAllUsers } from '../api/helperFunctions';
+import { helper_getCurrenUserGroups } from '../api/helperFunctions';
 
 const ctx: Worker = self as any;
 // Post data to parent thread
@@ -7,9 +7,8 @@ const ctx: Worker = self as any;
 ctx.addEventListener('message', (event) => {
     let { payload, type } = event.data.action;
 
-    Promise.resolve(getAllUsers(payload[`siteUrl`], payload[`readOptions`]))
+    Promise.resolve(helper_getCurrenUserGroups(payload[`siteUrl`], payload[`readOptions`], payload[`userId`]))
         .then(res => {
-            console.log('worker users', res);
             ctx.postMessage({
                 type,
                 payload: res
