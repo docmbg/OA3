@@ -4,7 +4,8 @@ declare module 'gojs';
 declare module 'react-redux';
 declare module 'redux-thunk';
 // declare module 'redux';
-// declare module 'connected-react-router';
+declare module 'connected-react-router';
+declare module 'react-materialize';
 declare module "worker-loader!*" {
     class WebpackWorker extends Worker {
       constructor();

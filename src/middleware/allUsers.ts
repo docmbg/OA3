@@ -1,4 +1,6 @@
 import { getAllUsers } from '../api/helperFunctions';
+import 'whatwg-fetch';
+import 'promise-polyfill/src/polyfill';
 
 const ctx: Worker = self as any;
 // Post data to parent thread

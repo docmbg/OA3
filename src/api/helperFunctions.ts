@@ -1,11 +1,23 @@
-export async function getAllSubSites(url: string, arr: Array<String>, mainUrl: string, options: any) {
+export async function getAllSubSites(url: string, arr: Array<Object>, mainUrl: string, options: any) {
     let promises: any = [];
     let fetchUrl = url !== mainUrl ? url : `${mainUrl}/_api/Web/webs`;
+    if (arr.length === 0) {
+        let mainTitle = await fetch(`${mainUrl}/_api/web`, options)
+            .then(res => res.json())
+            .then(res => res.d.Title);
+        arr.push({
+            url: mainUrl,
+            title: mainTitle
+        });
+    }
     await fetch(fetchUrl, options).then(res => res.json())
         .catch(error => console.error('Error:', error))
         .then(response => {
             response.d.results.map((e: Object) => {
-                arr.push(e[`Url`]);
+                arr.push({
+                    url: e[`Url`],
+                    title: e[`Title`]
+                });
                 promises.push(getAllSubSites(`${e[`__metadata`][`uri`]}/webs`, arr, mainUrl, options));
 
             });
@@ -91,11 +103,32 @@ export async function getEmptyFolders(siteUrl: string, readOptions: any, request
     return emptyFolders;
 }
 
-export async function getAllGroups(url: string, readOptions: any) {
-    let groups = await fetch(`${url}/_api/web/roleassignments/groups`, readOptions)
-        .then(res => res.json())
-        .then(res => res.d.results);
+// export async function getAllGroups(url: string, readOptions: any) {
+//     let groups = await fetch(`${url}/_api/web/roleassignments/groups`, readOptions)
+//         .then(res => res.json())
+//         .then(res => res.d.results);
+//     return groups;
+// }
+
+export async function getAllGroups(sites: Array<string>, readOptions: any) {
+    let promises = [];
+    for (let site of sites) {
+        promises.push(getGroup(site, readOptions));
+    }
+    let groups = await Promise.all(promises);
     return groups;
+}
+
+async function getGroup(site: string, readOptions: any) {
+    return await fetch(`${site[`url`]}/_api/web/roleassignments/groups`, readOptions)
+        .then(res => res.json())
+        .then(res => {
+            return res.d.results.map((e: Object) => {
+                e[`siteUrl`] = site[`url`];
+                e[`siteTitle`] = site[`title`];
+                return e;
+            });
+        });
 }
 
 export async function helper_getCurrenUserGroups(url: string, readOptions: any, userId: number) {
@@ -121,11 +154,11 @@ export async function addRemoveUserToGroup
             'LoginName': user.LoginName
         });
         postOptions.body = body;
-        complete = fetch(`${url}_api/Web/sitegroups(${groupId})/users`, postOptions)
+        complete = fetch(`${url}/_api/Web/sitegroups(${groupId})/users`, postOptions)
             .then(res => res.json())
             .then(res => complete = true);
     } else if (operation === 'remove') {
-        complete = fetch(`${url}_api/Web/sitegroups(${groupId})/users/removebyid(${user.Id})`, postOptions)
+        complete = fetch(`${url}/_api/Web/sitegroups(${groupId})/users/removebyid(${user.Id})`, postOptions)
             .then(res => res.json())
             .then(res => complete = true);
     }
