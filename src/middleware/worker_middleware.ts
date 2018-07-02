@@ -1,9 +1,11 @@
 import { getAllGroups } from '../actions/get_groups';
 import { updateUserGroups } from '../actions/update_user_groups';
+import UpdateCopiedPermissions from '../actions/update_copied_permissions';
 import WorkerAllUsers from 'worker-loader!./allUsers.ts';
 import WorkerAllGroups from 'worker-loader!./allGroups.ts';
 import WorkerAllSites from 'worker-loader!./allSites.ts';
 import WorkerCurrentUserGroups from 'worker-loader!./currentUserGroups.ts';
+import WorkerPastePermissions from 'worker-loader!./pastePermissions.ts';
 
 import {
     ALL_USERS,
@@ -12,12 +14,15 @@ import {
     ALL_GROUPS,
     ALL_SITES,
     SET_CURRENT_USER,
+    UPDATE_COPIED_PERMISSIONS,
+    PASTE_PERMISSIONS
 } from '../consts';
 
 const wAllUsers = new WorkerAllUsers();
 const wAllGroups = new WorkerAllGroups();
 const wAllSites = new WorkerAllSites();
 const wCurrentUserGroups = new WorkerCurrentUserGroups();
+const wPastePermissions = new WorkerPastePermissions();
 
 export const customPromiseMiddleware = (store: any) => (next: any) => (action: any) => {
     console.log('Action', action);
@@ -50,6 +55,20 @@ export const customPromiseMiddleware = (store: any) => (next: any) => (action: a
             }));
             next(action);
 
+            break;
+        case UPDATE_COPIED_PERMISSIONS:
+            next(action);
+            break;
+        case PASTE_PERMISSIONS:
+            wPastePermissions.postMessage({ action });
+            wPastePermissions.onmessage = function (event: any) {
+                store.dispatch(updateUserGroups({
+                    task: 'create',
+                    _requestDigest: action.payload[`_requestDigest`],
+                    user: action.payload.currentUser
+                }));
+                store.dispatch(UpdateCopiedPermissions([]));
+            };
             break;
         default:
             break;

@@ -6,6 +6,7 @@ import { setCurrentUser } from '../actions/set_current_user';
 import { siteUrl } from '../consts';
 import { updateDigest } from '../api/helperFunctions';
 import SitesComponent from '../components/sites_component';
+import CopyPermissions from '../containers/copy_permissions';
 
 class UserAccess extends React.Component<any, any> {
     constructor(props: any) {
@@ -37,27 +38,36 @@ class UserAccess extends React.Component<any, any> {
     render() {
         return (
             <div className="container">
-                <Navigation />
-                <div className="row">
-                    <input
-                        value={this.state.value}
-                        onChange={(e) => this.onInputChange(e)}
-                        placeholder="User Email/Login"
-                    />
-                    <button onClick={(e: any) => this.onFormSubmit(e)}>Search</button>
-                    <div className="col s5">
-                        <br />
-                        <SitesComponent sites={this.props.sites} groups={this.props.groups} />
-                    </div>
-                </div>
+                {this.props.sites.length === 0 ?
+                    (<Navigation />)
+                    :
+                    (
+                        
+                        <div>
+                            <Navigation />
+                            <div className="row">
+                                <input
+                                    value={this.state.value}
+                                    onChange={(e) => this.onInputChange(e)}
+                                    placeholder="User Email/Login"
+                                />
+                                <button onClick={(e: any) => this.onFormSubmit(e)}>Search</button>
+                                <div className="col s5">
+                                    <br />
+                                    <SitesComponent sites={this.props.sites} groups={this.props.groups} />
+                                </div>
+                            </div>
 
-                <div className="col s5 offset-s1" />
-                <ul>
-                    {this.props.currentUserGroups.map((e: Object, i: number) => {
-                        return <li key={i}>{e[`Title`]}</li>;
-                    })}
-                </ul>
-                {/* <CopyPermissions/> */}
+                            <div className="col s5 offset-s1" />
+                            <ul>
+                                {this.props.currentUserGroups.map((e: Object, i: number) => {
+                                    return <li key={i}>{e[`Title`]}</li>;
+                                })}
+                            </ul>
+                            <CopyPermissions/>
+                        </div>
+                    )
+                }
             </div>
         );
     }

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import '../sass/App.css';
-// import Navigation from '../containers/navigation';
-// import Stage from '../containers/stage';
-import 'promise-polyfill/src/polyfill';
+import Navigation from '../containers/navigation';
+import Stage from '../containers/stage';
 import Loader from '../components/loader';
 
 class App extends React.Component<any, any> {
@@ -11,7 +10,8 @@ class App extends React.Component<any, any> {
     return (
       <div>
         <Loader />
-        {/* <Stage /> */}
+        <Navigation/>
+        <Stage />
       </div>
     );
   }
