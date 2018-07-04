@@ -8,6 +8,7 @@ export const UPDATE_USER_GROUPS = 'UPDATE_USER_GROUPS';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const UPDATE_COPIED_PERMISSIONS = 'UPDATE_COPIED_PERMISSIONS';
 export const PASTE_PERMISSIONS = 'PASTE_PERMISSIONS';
+export const GENERATE_MATRIX = 'GENERATE_MATRIX';
 
 export const readOptions = {
     method: 'GET', // or 'PUT'

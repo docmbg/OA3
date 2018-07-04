@@ -1,3 +1,4 @@
+
 export async function getAllSubSites(url: string, arr: Array<Object>, mainUrl: string, options: any) {
     let promises: any = [];
     let fetchUrl = url !== mainUrl ? url : `${mainUrl}/_api/Web/webs`;
@@ -36,8 +37,8 @@ export async function getFolderUrisRecursive(guid: string, options: any) {
 }
 
 export async function getAllLists(url: string, options: any, libsOnly: boolean) {
-    let getListsUrl = `${url}/_api/Web/Lists`;
-    let lists = await fetch(getListsUrl, options).then(res => res.json())
+    const getListsUrl = `${url}/_api/Web/Lists/?$expand=RootFolder`;
+    const lists = await fetch(getListsUrl, options).then(res => res.json())
         .catch(error => console.error('Error:', error))
         .then(response => {
             if (libsOnly) {
@@ -46,6 +47,18 @@ export async function getAllLists(url: string, options: any, libsOnly: boolean) 
                 return response.d.results;
             }
         });
+    let promises = [];
+    for (let list of lists) {
+        console.log(list.__metadata.id);
+        promises.push(fetch(`${list.__metadata.id}/HasUniqueRoleAssignments`, options)
+            .then(res => res.json()).then(res => res.d.HasUniqueRoleAssignments));
+    }
+    const roleassignments = await Promise.all(promises);
+    let counter = 0;
+    for (let list of lists) {
+        list.uniquePermissions = roleassignments[counter];
+        counter++;
+    }
     return lists;
 }
 
@@ -136,6 +149,50 @@ export async function helper_getCurrenUserGroups(url: string, readOptions: any, 
         .then(res => res.json())
         .then(res => res.d.results);
     return groups;
+}
+
+export async function getSitePermissions(url: string, readOptions: any, title: string) {
+    const roleassignments = await fetch(`${url}/_api/web/RoleAssignments`, readOptions)
+        .then(res => res.json())
+        .then(res => res.d.results);
+    let promises = [];
+    for (const role of roleassignments) {
+        promises.push(
+            fetch(role.Member.__deferred.uri, readOptions).
+                then(res => res.json()).
+                then(res => res.d)
+        );
+    }
+    const members = await Promise.all(promises);
+    promises = [];
+    for (const role of roleassignments) {
+        promises.push(
+            fetch(role.RoleDefinitionBindings.__deferred.uri, readOptions).
+                then(res => res.json()).
+                then(res => res.d.results)
+        );
+    }
+    const roledefinitions = await Promise.all(promises);
+    let groupPermissions = [];
+    let counter = 0;
+    for (let member of members) {
+        if (member.hasOwnProperty('Users')) {
+            groupPermissions.push({
+                title,
+                name: member.Title,
+                permissions: roledefinitions[counter].map((e: any) => e.Name).join(', ')
+            });
+        }
+        counter++;
+    }
+    return groupPermissions;
+}
+
+export async function getUsersByGroup(url: string, readOptions: any) {
+    let users = await fetch(url, readOptions).
+        then(res => res.json()).
+        then(res => res.d.results.map((e: any) => e.Email));
+    return users;
 }
 
 export async function addRemoveUserToGroup

@@ -6,6 +6,7 @@ import WorkerAllGroups from 'worker-loader!./allGroups.ts';
 import WorkerAllSites from 'worker-loader!./allSites.ts';
 import WorkerCurrentUserGroups from 'worker-loader!./currentUserGroups.ts';
 import WorkerPastePermissions from 'worker-loader!./pastePermissions.ts';
+import WorkerGenerateMatrix from 'worker-loader!./generateMatrix.ts';
 
 import {
     ALL_USERS,
@@ -15,7 +16,8 @@ import {
     ALL_SITES,
     SET_CURRENT_USER,
     UPDATE_COPIED_PERMISSIONS,
-    PASTE_PERMISSIONS
+    PASTE_PERMISSIONS,
+    GENERATE_MATRIX
 } from '../consts';
 
 const wAllUsers = new WorkerAllUsers();
@@ -23,6 +25,7 @@ const wAllGroups = new WorkerAllGroups();
 const wAllSites = new WorkerAllSites();
 const wCurrentUserGroups = new WorkerCurrentUserGroups();
 const wPastePermissions = new WorkerPastePermissions();
+const wGenerateMatrix = new WorkerGenerateMatrix();
 
 export const customPromiseMiddleware = (store: any) => (next: any) => (action: any) => {
     console.log('Action', action);
@@ -69,6 +72,9 @@ export const customPromiseMiddleware = (store: any) => (next: any) => (action: a
                 }));
                 store.dispatch(UpdateCopiedPermissions([]));
             };
+            break;
+        case GENERATE_MATRIX:
+            workerInit(wGenerateMatrix, action, next);
             break;
         default:
             break;

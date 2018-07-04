@@ -12,20 +12,21 @@ class GroupStage extends React.Component<any, any> {
     }
 
     addRemoveToGroup(text: string) {
+        let that = this;
         let operation = text === 'Remove' ? 'remove' : 'add';
         Promise.resolve(updateDigest(siteUrl))
             .then(res => {
-                this.props.updateUserGroups(
+                that.props.updateUserGroups(
                     {
                         task: 'update',
                         _requestDigest: res,
-                        user: this.props.currentUser.user,
+                        user: that.props.currentUser.user,
                         group: {
-                            Id: this.props.groupId,
-                            Title: this.props.title
+                            Id: that.props.groupId,
+                            Title: that.props.title
                         },
                         crudOperation: operation,
-                        currentUserGroups: this.props.currentUserGroups
+                        currentUserGroups: that.props.currentUserGroups
                     }
                 );
             });

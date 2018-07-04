@@ -5,7 +5,8 @@ import AllGroupsReducer from './reducer_allGroups';
 import AllSitesReducer from './reducer_allSites';
 import CurrentUserGroupsReducer from './reducer_current_user_groups';
 import CurrentUserReducer from './reducer_current_user';
-import UpdateCopiedPermissions from './reducer_update_copied_permissions';
+import UpdateCopiedPermissionsReducer from './reducer_update_copied_permissions';
+import MatrixReducer from './reducer_matrix';
 
 const rootReducer: any = combineReducers({
     stage: StageReducer,
@@ -14,7 +15,8 @@ const rootReducer: any = combineReducers({
     sites: AllSitesReducer,
     currentUserGroups: CurrentUserGroupsReducer,
     currentUser: CurrentUserReducer,
-    copiedPermissions: UpdateCopiedPermissions,
+    copiedPermissions: UpdateCopiedPermissionsReducer,
+    matrix: MatrixReducer
 });
 
 export default rootReducer;
