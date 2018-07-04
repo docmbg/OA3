@@ -4,9 +4,11 @@ export const SET_STAGE = 'SET_STAGE';
 export const ALL_USERS = 'ALL_USERS';
 export const ALL_SITES = 'ALL_SITES';
 export const ALL_GROUPS = 'ALL_GROUPS';
-export const SET_SEARCH_USER = 'SET_SEARCH_USER';
-export const CURRENT_USER_GROUPS = 'CURRENT_USER_GROUPS';
-export const CHANGE_URL = 'CHANGE_URL';
+export const UPDATE_USER_GROUPS = 'UPDATE_USER_GROUPS';
+export const SET_CURRENT_USER = 'SET_CURRENT_USER';
+export const UPDATE_COPIED_PERMISSIONS = 'UPDATE_COPIED_PERMISSIONS';
+export const PASTE_PERMISSIONS = 'PASTE_PERMISSIONS';
+export const GENERATE_MATRIX = 'GENERATE_MATRIX';
 
 export const readOptions = {
     method: 'GET', // or 'PUT'
@@ -16,5 +18,15 @@ export const readOptions = {
         'content-type': 'application/json;odata=verbose'
     }
 };
+
+export const postOptions = {
+    method: 'POST', // or 'PUT'
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json; odata=verbose',
+        'content-type': 'application/json;odata=verbose'
+    }
+};
+
 export const paramUrl = window.location.href.includes('sites') ? 'sites' : 'teams';
 export const siteUrl = getMainUrl(paramUrl);

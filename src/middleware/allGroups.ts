@@ -1,4 +1,6 @@
 import { getAllGroups } from '../api/helperFunctions';
+import 'whatwg-fetch';
+import 'promise-polyfill/src/polyfill';
 
 const ctx: Worker = self as any;
 // Post data to parent thread
@@ -7,7 +9,7 @@ const ctx: Worker = self as any;
 ctx.addEventListener('message', (event) => {
     let { payload, type } = event.data.action;
 
-    Promise.resolve(getAllGroups(payload[`siteUrl`], payload[`readOptions`]))
+    Promise.resolve(getAllGroups(payload[`sites`], payload[`readOptions`]))
         .then(res => {
             console.log('worker groups', res);
             ctx.postMessage({

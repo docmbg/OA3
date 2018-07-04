@@ -2,9 +2,11 @@ import * as React from 'react';
 import Navigation from './navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { currentUserGroups } from '../actions/current_user_groups';
+import { setCurrentUser } from '../actions/set_current_user';
 import { siteUrl } from '../consts';
 import { updateDigest } from '../api/helperFunctions';
+import SitesComponent from '../components/sites_component';
+import CopyPermissions from '../containers/copy_permissions';
 
 class UserAccess extends React.Component<any, any> {
     constructor(props: any) {
@@ -24,54 +26,64 @@ class UserAccess extends React.Component<any, any> {
         let that = this;
         let value = this.state.value;
         let searchedUser = this.props.users.filter(
-            (e: Object) => e[`Email`] === value || e[`Title`] === value)[0][`Id`];
+            (e: Object) => e[`Email`] === value || e[`Title`] === value)[0];
 
         Promise.resolve(updateDigest(siteUrl))
             .then(res => {
                 console.log(res);
-                that.props.currentUserGroups(res, searchedUser);
+                that.props.setCurrentUser(res, searchedUser);
             });
     }
 
     render() {
         return (
             <div className="container">
-                <Navigation />
-                <div className="row">
-                    <input
-                        value={this.state.value}
-                        onChange={(e) => this.onInputChange(e)}
-                        placeholder="User Email/Login"
-                    />
-                    <button onClick={(e: any) => this.onFormSubmit(e)}>Search</button>
-                    <div className="col s5">
-                        <br />
-                        {/* <AddRemovePermissions/> */}
-                    </div>
-                </div>
+                {this.props.sites.length === 0 ?
+                    (<Navigation />)
+                    :
+                    (
+                        
+                        <div>
+                            <Navigation />
+                            <div className="row">
+                                <input
+                                    value={this.state.value}
+                                    onChange={(e) => this.onInputChange(e)}
+                                    placeholder="User Email/Login"
+                                />
+                                <button onClick={(e: any) => this.onFormSubmit(e)}>Search</button>
+                                <div className="col s5">
+                                    <br />
+                                    <SitesComponent sites={this.props.sites} groups={this.props.groups} />
+                                </div>
+                            </div>
 
-                <div className="col s5 offset-s1">
-                    <ul>
-                        {this.props.searchedUserGroups.map((e: Object, i: number) => {
-                            return <li key={i}>{e[`Title`]}</li>;
-                        })}
-                    </ul>
-                </div>
-                {/* <CopyPermissions/> */}
+                            <div className="col s5 offset-s1" />
+                            <ul>
+                                {this.props.currentUserGroups.map((e: Object, i: number) => {
+                                    return <li key={i}>{e[`Title`]}</li>;
+                                })}
+                            </ul>
+                            <CopyPermissions/>
+                        </div>
+                    )
+                }
             </div>
         );
     }
 }
 
-function mapStateToProps({ users, searchedUserGroups }: any) {
+function mapStateToProps({ users, currentUserGroups, sites, groups }: any) {
     return {
         users,
-        searchedUserGroups
+        currentUserGroups,
+        sites,
+        groups
     };
 }
 
 function mapDispatchToPropos(dispatch: any) {
-    return bindActionCreators({ currentUserGroups }, dispatch);
+    return bindActionCreators({ setCurrentUser }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToPropos)(UserAccess);
