@@ -1,4 +1,4 @@
-// import { getMainUrl } from './api/helperFunctions';
+import { getMainUrl } from './api/helperFunctions';
 
 export const SET_STAGE = 'SET_STAGE';
 export const ALL_USERS = 'ALL_USERS';
@@ -10,6 +10,7 @@ export const UPDATE_COPIED_PERMISSIONS = 'UPDATE_COPIED_PERMISSIONS';
 export const PASTE_PERMISSIONS = 'PASTE_PERMISSIONS';
 export const GENERATE_MATRIX = 'GENERATE_MATRIX';
 export const GENERATE_EMPTY_FOLDERS = 'GENERATE_EMPTY_FOLDERS';
+export const DELETE_EMPTY_FOLDERS = 'DELETE_EMPTY_FOLDERS';
 
 export const readOptions = {
     method: 'GET', // or 'PUT'
@@ -30,4 +31,4 @@ export const postOptions = {
 };
 
 export const paramUrl = window.location.href.includes('sites') ? 'sites' : 'teams';
-export const siteUrl = '';
+export const siteUrl = getMainUrl(paramUrl);

@@ -2,39 +2,75 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { generateEmptyFolders } from '../actions/generate_empty_folders';
+import { deleteEmptyFolders } from '../actions/delete_empty_folders';
 import { siteUrl } from '../consts';
 import { updateDigest } from '../api/helperFunctions';
 import Navigation from '../containers/navigation';
 import LinearLoader from '../components/loader';
 import { generateEmptyFoldersExcel } from '../api/generate_empty_folders_excel';
+import Papa from 'papaparse';
 
 class EmptyFolderStage extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
             loaded: true,
+            urls: [],
+            action: '',
         };
     }
 
-    onButtonClick() {
+    onGetButtonClick() {
         let that = this;
         Promise.resolve(updateDigest(siteUrl)).then(
             res => {
                 that.props.generateEmptyFolders(
                     res,
-                    that.props.sites,
+                    this.props.sites,
                     this.props.users
                 );
                 that.setState({
                     loaded: false,
+                    action: 'get'
                 });
             }
         );
     }
 
+    onDeleteButtonClick() {
+        let that = this;
+        Promise.resolve(updateDigest(siteUrl)).then(
+            res => {
+                that.props.deleteEmptyFolders(
+                    res,
+                    that.state.urls,
+                );
+                that.setState({
+                    loaded: false,
+                    action: 'delete'
+                });
+            }
+        );
+    }
+
+    onFileUpload(e: any) {
+        const file = e[0];
+        const that = this;
+        Papa.parse(file, {
+            header: true,
+            complete: function (results: any) {
+                results.data.pop();
+                const urls = results.data.map((entry: any) => entry.URL);
+                that.setState({
+                    urls,
+                });
+            }
+        });
+    }
+
     render() {
-        let loaded = this.state.loaded || this.props.emptyFolders.length !== 0;
-        if (this.props.emptyFolders.length !== 0) {
+        let loaded = this.state.loaded || this.props.emptyFolders.length !== 0 || this.props.foldersDeleted;
+        if (this.props.emptyFolders.length !== 0 && this.state.action === 'get') {
             generateEmptyFoldersExcel(this.props.emptyFolders);
         }
         return (
@@ -47,9 +83,25 @@ class EmptyFolderStage extends React.Component<any, any> {
                             <Navigation />
                             {
                                 loaded ?
-                                    <div onClick={() => this.onButtonClick()}>
+                                    <div>
                                         <i className="material-icons">save_alt</i>
-                                        <button> Get empty folders </button>
+                                        <button onClick={() => this.onGetButtonClick()}> Get empty folders </button>
+                                        <input onChange={(e) => this.onFileUpload(e.target.files)} type="file" />
+                                        {
+                                            this.state.urls.length === 0 ?
+                                                <div />
+                                                :
+                                                !this.props.foldersDeleted ?
+                                                    <button
+                                                        onClick={
+                                                            () => this.onDeleteButtonClick()
+                                                        }
+                                                    >
+                                                        Delete Empty Folders
+                                                    </button> :
+                                                    <p>Folders  successfully Deleted</p>
+                                        }
+
                                     </div>
                                     :
                                     <LinearLoader />
@@ -64,16 +116,17 @@ class EmptyFolderStage extends React.Component<any, any> {
     }
 }
 
-function mapStateToProps({ sites, emptyFolders, users }: any) {
+function mapStateToProps({ sites, emptyFolders, users, foldersDeleted }: any) {
     return {
         sites,
         emptyFolders,
-        users
+        users,
+        foldersDeleted
     };
 }
 
 function mapDispatchToProps(dispatch: any) {
-    return bindActionCreators({ generateEmptyFolders }, dispatch);
+    return bindActionCreators({ generateEmptyFolders, deleteEmptyFolders }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EmptyFolderStage);

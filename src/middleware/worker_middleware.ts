@@ -8,6 +8,7 @@ import WorkerCurrentUserGroups from 'worker-loader!./currentUserGroups.ts';
 import WorkerPastePermissions from 'worker-loader!./pastePermissions.ts';
 import WorkerGenerateMatrix from 'worker-loader!./generateMatrix.ts';
 import WorkerGenerateEmptyFolders from 'worker-loader!./generateEmptyFolders.ts';
+import WorkerDeleteEmptyFolders from 'worker-loader!./deleteEmptyFolders.ts';
 
 import {
     ALL_USERS,
@@ -19,7 +20,8 @@ import {
     UPDATE_COPIED_PERMISSIONS,
     PASTE_PERMISSIONS,
     GENERATE_MATRIX,
-    GENERATE_EMPTY_FOLDERS
+    GENERATE_EMPTY_FOLDERS,
+    DELETE_EMPTY_FOLDERS
 } from '../consts';
 
 const wAllUsers = new WorkerAllUsers();
@@ -29,6 +31,7 @@ const wCurrentUserGroups = new WorkerCurrentUserGroups();
 const wPastePermissions = new WorkerPastePermissions();
 const wGenerateMatrix = new WorkerGenerateMatrix();
 const wGenerateEmptyFolders = new WorkerGenerateEmptyFolders();
+const wDeleteEmptyFolders = new WorkerDeleteEmptyFolders();
 
 export const customPromiseMiddleware = (store: any) => (next: any) => (action: any) => {
     console.log('Action', action);
@@ -81,6 +84,9 @@ export const customPromiseMiddleware = (store: any) => (next: any) => (action: a
             break;
         case GENERATE_EMPTY_FOLDERS:
             workerInit(wGenerateEmptyFolders, action, next);
+            break;
+        case DELETE_EMPTY_FOLDERS:
+            workerInit(wDeleteEmptyFolders, action, next);
             break;
         default:
             break;

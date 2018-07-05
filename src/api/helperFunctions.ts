@@ -74,7 +74,7 @@ export function createFolderInformation(url: string, folders: Array<Object>, use
     for (let folder of folders) {
         let ph = {};
         ph[`Name`] = folder[`Folder`][`Name`];
-        ph[`URL`] = `${url}${folder[`Folder`][`ServerRelativeUrl`]}`;
+        ph[`URL`] = `${folder[`Folder`][`ServerRelativeUrl`]}`;
         ph[`Author`] = users.filter((e: Object) => e[`Id`] === folder[`AuthorId`])[0][`Email`];
         ph[`Modified By`] = users.filter((e: Object) => e[`Id`] === folder[`EditorId`])[0][`Email`];
         ph[`Created`] = new Date(folder[`Folder`][`TimeCreated`]).toLocaleDateString();
@@ -267,9 +267,9 @@ export async function getWorkflows(sites: Array<string>, readOptions: any) {
 //     return checkedLists;
 // }
 
-export default function deleteFolder(url: string, postOptions: any, mainUrl: string) {
+export function deleteFolder(url: string, postOptions: any, mainUrl: string) {
     postOptions.headers[`X-HTTP-Method`] = 'DELETE';
-    return fetch(`${mainUrl}/_api/web/GetFolderByServerRelativeUrl(${url})`, postOptions)
+    return fetch(`${mainUrl}/_api/web/GetFolderByServerRelativeUrl('${url}')`, postOptions)
         .then(res => res.text()).then(res => res);
 }
 
@@ -296,4 +296,16 @@ export async function updateDigest(url: string) {
         .then(res => res.d.GetContextWebInformation.FormDigestValue);
 
     return digest;
+}
+
+export function convertNumber(n: number) {
+    let ordA = 'A'.charCodeAt(0);
+    let ordZ = 'Z'.charCodeAt(0);
+    let len = ordZ - ordA + 1;
+    let s = '';
+    while (n >= 0) {
+        s = String.fromCharCode(n % len + ordA) + s;
+        n = Math.floor(n / len) - 1;
+    }
+    return s;
 }

@@ -2,7 +2,7 @@ import XlsxPopulate from 'xlsx-populate';
 import { siteUrl } from '../consts';
 import { convertNumber } from './helperFunctions';
 
-export function generateEmptyFoldersExcel(data: any) {
+export function generateExcelUsers(data: any) {
     let columns = Object.keys(data[0]);
     const siteName = siteUrl.split('/')[siteUrl.split('/').length - 1];
     XlsxPopulate.fromBlankAsync()
@@ -32,7 +32,7 @@ export function generateEmptyFoldersExcel(data: any) {
             return workbook.outputAsync();
         }).then(function (blob: any) {
 
-            let nameOfFile = `Empty Folders -${siteName}`;
+            let nameOfFile = `All Users -${siteName}`;
             if (window.navigator && window.navigator.msSaveOrOpenBlob) {
                 window.navigator.msSaveOrOpenBlob(blob, nameOfFile);
             } else {

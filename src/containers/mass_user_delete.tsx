@@ -25,7 +25,7 @@ export default class MassUserDelete extends React.Component<any, any> {
                 let data = [].concat(...results.data);
                 console.log(data);
                 for (let userForRemoval of data) {
-                    if (mockedData.indexOf(userForRemoval) > -1) {
+                    if (mockedData.includes(userForRemoval)) {
                         validPh.push(userForRemoval);
                     } else {
                         invalidPh.push(userForRemoval);
