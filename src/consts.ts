@@ -1,4 +1,4 @@
-import { getMainUrl } from './api/helperFunctions';
+// import { getMainUrl } from './api/helperFunctions';
 
 export const SET_STAGE = 'SET_STAGE';
 export const ALL_USERS = 'ALL_USERS';
@@ -30,4 +30,4 @@ export const postOptions = {
 };
 
 export const paramUrl = window.location.href.includes('sites') ? 'sites' : 'teams';
-export const siteUrl = getMainUrl(paramUrl);
+export const siteUrl = '';
