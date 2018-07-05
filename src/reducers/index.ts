@@ -7,6 +7,7 @@ import CurrentUserGroupsReducer from './reducer_current_user_groups';
 import CurrentUserReducer from './reducer_current_user';
 import UpdateCopiedPermissionsReducer from './reducer_update_copied_permissions';
 import MatrixReducer from './reducer_matrix';
+import EmptyFoldersReducer from './reducer_empty_folders';
 
 const rootReducer: any = combineReducers({
     stage: StageReducer,
@@ -16,7 +17,8 @@ const rootReducer: any = combineReducers({
     currentUserGroups: CurrentUserGroupsReducer,
     currentUser: CurrentUserReducer,
     copiedPermissions: UpdateCopiedPermissionsReducer,
-    matrix: MatrixReducer
+    matrix: MatrixReducer,
+    emptyFolders: EmptyFoldersReducer
 });
 
 export default rootReducer;

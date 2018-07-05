@@ -46,7 +46,7 @@ class Navigation extends React.Component<any, any> {
                         <Link to="/home/matrix">Get Users</Link>
                         <Link to="/home/allusers">Get Users</Link>
                         <Link to="/home/structure">Get Users</Link>
-                        <Link to="/home/folders">Get Users</Link>
+                        <Link to="/home/folders">Get Empty Folders</Link>
                         <Link to="/home/workflows">Get Users</Link>
                         <Link to="/home/lists">Get Users</Link>
                     </div>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import reducers from './reducers/index';
 // import App from './components/App';
+import EmptyFolderStage from './containers/empty_folders_stage';
 import Matrix from './containers/matrix';
 // import UserAccess from './containers/permission_stage';
 import { Provider } from 'react-redux';
@@ -36,7 +37,7 @@ ReactDOM.render(
           {/* <Route exact={true} path="/home" component={App} /> */}
           {/* <Route exact={true} path="/home/useraccess" component={UserAccess} /> */}
           <Route exact={true} path="/home/matrix" component={Matrix} />
-
+          <Route exact={true} path="/home/folders" component={EmptyFolderStage} />
         </Switch>
       </div>
     </Provider>

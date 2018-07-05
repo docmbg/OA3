@@ -6,7 +6,7 @@ import { siteUrl } from '../consts';
 import { updateDigest } from '../api/helperFunctions';
 import Navigation from '../containers/navigation';
 import LinearLoader from '../components/loader';
-import { generateExcelMatrix } from '../api/generate_matrix_Excel';
+import { generateExcelMatrix } from '../api/generate_matrix_excel';
 
 class Matrix extends React.Component<any, any> {
     constructor(props: any) {

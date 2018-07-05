@@ -27,10 +27,10 @@ export async function getAllSubSites(url: string, arr: Array<Object>, mainUrl: s
 }
 
 export async function getFolderUrisRecursive(guid: string, options: any) {
-    const view = `ServerRelativeUrl&@v1={'ViewXml':'<View Scope='RecursiveAll'>` +
-        `<Query><Where><Eq><FieldRef Name='FSObjType' /><Value Type='Integer'>1</Value></Eq></Where></Query></View>'}`;
+    const view = `ServerRelativeUrl&@v1={"ViewXml":"<View Scope='RecursiveAll'>` +
+        `<Query><Where><Eq><FieldRef Name='FSObjType' /><Value Type='Integer'>1</Value></Eq></Where></Query></View>"}`;
     let folderURIs = await fetch(
-        `${guid}/GetItems(query=@v1)?$expand=Folder/` + `${view}`,
+        `${guid}/GetItems(query=@v1)?$expand=Folder/${view}`,
         options
     ).then(res => res.json()).then(res => res.d.results);
     return folderURIs;
@@ -84,26 +84,15 @@ export function createFolderInformation(url: string, folders: Array<Object>, use
     return emptyFolders;
 }
 
-export async function getEmptyFolders(siteUrl: string, readOptions: any, requestDigest: string) {
-    let sites: any = [];
+export async function getEmptyFolders(sites: any, readOptions: any, postOptions: any) {
     let promises = [];
     let lists: any = [];
     let folders;
-    await getAllSubSites(siteUrl, sites, siteUrl, readOptions);
     for (let site of sites) {
-        promises.push(getAllLists(site, readOptions, true));
+        promises.push(getAllLists(site.url, readOptions, true));
     }
     await Promise.all(promises).then(res => lists = res);
     promises = [];
-    const postOptions: any = {
-        method: 'POST', // or 'PUT'
-        credentials: 'include',
-        headers: {
-            'Accept': 'application/json; odata=verbose',
-            'X-RequestDigest': requestDigest,
-            'content-type': 'application/json;odata=verbose'
-        }
-    };
     for (let i = 0; i < sites.length; i++) {
         for (let j = 0; j < lists[i].length; j++) {
             promises.push(getFolderUrisRecursive(lists[i][j][`__metadata`][`id`], postOptions));
@@ -264,19 +253,19 @@ export async function getWorkflows(sites: Array<string>, readOptions: any) {
 
 }
 
-export async function getVersioning(mainUrl: string, lists: any) {
-    let flatLists = [].concat.apply([], lists);
-    let checkedLists = [];
-    for (let list of flatLists) {
-        checkedLists.push({
-            'Name': list[`Title`],
-            'Url': `${mainUrl}/${list[`EntityTypeName`]}`,
-            'Enabled Versioning': list[`EnableVersioning`],
-            'Enabled Minor Versions': list[`EnableMinorVersions`]
-        });
-    }
-    return checkedLists;
-}
+// export async function getVersioning(mainUrl: string, lists: any) {
+//     let flatLists = [].concat.apply([], lists);
+//     let checkedLists = [];
+//     for (let list of flatLists) {
+//         checkedLists.push({
+//             'Name': list[`Title`],
+//             'Url': `${mainUrl}/${list[`EntityTypeName`]}`,
+//             'Enabled Versioning': list[`EnableVersioning`],
+//             'Enabled Minor Versions': list[`EnableMinorVersions`]
+//         });
+//     }
+//     return checkedLists;
+// }
 
 export default function deleteFolder(url: string, postOptions: any, mainUrl: string) {
     postOptions.headers[`X-HTTP-Method`] = 'DELETE';

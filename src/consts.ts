@@ -9,6 +9,7 @@ export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const UPDATE_COPIED_PERMISSIONS = 'UPDATE_COPIED_PERMISSIONS';
 export const PASTE_PERMISSIONS = 'PASTE_PERMISSIONS';
 export const GENERATE_MATRIX = 'GENERATE_MATRIX';
+export const GENERATE_EMPTY_FOLDERS = 'GENERATE_EMPTY_FOLDERS';
 
 export const readOptions = {
     method: 'GET', // or 'PUT'
