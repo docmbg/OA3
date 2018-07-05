@@ -1,9 +1,8 @@
 import * as React from 'react';
 import Papa from 'papaparse';
+import { connect } from 'react-redux';
 
-const mockedData: Array<String> = ['bizerska@dxc.com', 'antonio.bonev@dxc.com', 'dobromirai@dxc.com', 'nixata'];
-
-export default class MassUserDelete extends React.Component<any, any> {
+class MassUserDelete extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -19,19 +18,27 @@ export default class MassUserDelete extends React.Component<any, any> {
             complete: function (results: any) {
                 let validPh: any = [];
                 let invalidPh: any = [];
-                let data = [].concat(...results.data);
+                let data: Array<string> = [].concat(...results.data);
+                data.pop();
+                let match;
                 for (let userForRemoval of data) {
-                    if (mockedData.includes(userForRemoval)) {
-                        validPh.push(userForRemoval);
-                    } else {
+                    match = false;
+                    for (let userOnPlatform of that.props.users) {
+                        console.log(userForRemoval);
+                        if (userOnPlatform.Email === userForRemoval) {
+                            validPh.push(userOnPlatform);
+                            match = true;
+                            break;
+                        }
+                    }
+                    if (!match) {
                         invalidPh.push(userForRemoval);
                     }
                 }
-                that.setState({
 
+                that.setState({
                     valid: validPh,
                     invalid: invalidPh
-
                 });
             }
         });
@@ -50,7 +57,7 @@ export default class MassUserDelete extends React.Component<any, any> {
                     <div className="col s5">
                         <h5>Valid Users</h5>
                         {valid.length > 0 ?
-                            valid.map((e: any, i: number) => <p key={i}>{e}</p>)
+                            valid.map((e: any, i: number) => <p key={i}>{e.Title}{e.Id}</p>)
                             :
                             <div />
 
@@ -59,10 +66,7 @@ export default class MassUserDelete extends React.Component<any, any> {
                     <div className="col s5 offset-s1">
                         <h5>Invalid users</h5>
                         {invalid.length > 0 ?
-                            invalid.map((e: any, i: number) => {
-                                console.log(i);
-                                return <p key={i}>{e}</p>;
-                            })
+                            invalid.map((e: any, i: number) => <p key={i}>{e}</p>)
                             :
                             <div />
                         }
@@ -72,3 +76,11 @@ export default class MassUserDelete extends React.Component<any, any> {
         );
     }
 }
+
+function mapStateToProps({ users }: any) {
+    return {
+        users
+    };
+}
+
+export default connect(mapStateToProps)(MassUserDelete);

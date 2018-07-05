@@ -63,7 +63,7 @@ export async function getAllLists(url: string, options: any, libsOnly: boolean) 
 }
 
 export async function getAllUsers(url: string, readOptions: any) {
-    let users = await fetch(`${url}/_api/web/siteusers`, readOptions)
+    let users = await fetch(`${url}/_api/web/siteusers/?$expand=Groups`, readOptions)
         .then(res => res.json())
         .then(res => res.d.results);
     return users;
