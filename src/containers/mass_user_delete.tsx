@@ -7,10 +7,8 @@ export default class MassUserDelete extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-
             valid: [],
             invalid: []
-
         };
     }
 
@@ -21,11 +19,9 @@ export default class MassUserDelete extends React.Component<any, any> {
             complete: function (results: any) {
                 let validPh: any = [];
                 let invalidPh: any = [];
-
                 let data = [].concat(...results.data);
-                console.log(data);
                 for (let userForRemoval of data) {
-                    if (mockedData.indexOf(userForRemoval) > -1) {
+                    if (mockedData.includes(userForRemoval)) {
                         validPh.push(userForRemoval);
                     } else {
                         invalidPh.push(userForRemoval);
@@ -63,10 +59,12 @@ export default class MassUserDelete extends React.Component<any, any> {
                     <div className="col s5 offset-s1">
                         <h5>Invalid users</h5>
                         {invalid.length > 0 ?
-                            invalid.map((e: any, i: number) => <p key={i}>{e}</p>)
+                            invalid.map((e: any, i: number) => {
+                                console.log(i);
+                                return <p key={i}>{e}</p>;
+                            })
                             :
                             <div />
-
                         }
                     </div>
                 </div>
