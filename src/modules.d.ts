@@ -3,6 +3,7 @@ declare module 'xlsx-populate';
 declare module 'gojs';
 declare module 'react-redux';
 declare module 'redux-thunk';
+declare module 'papaparse';
 // declare module 'redux';
 declare module 'connected-react-router';
 declare module 'react-materialize';
