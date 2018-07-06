@@ -3,11 +3,11 @@ import { siteUrl } from '../consts';
 import { convertNumber } from './helperFunctions';
 
 export function generateExcelListsInformation(data: any) {
-    let columns = ['Title', 'Email', 'LoginName'];
+    let columns = ['Title', 'Versioning Enabled', 'Location', 'Column Types', 'Existing Workflows'];
     const siteName = siteUrl.split('/')[siteUrl.split('/').length - 1];
     XlsxPopulate.fromBlankAsync()
         .then((workbook: any) => {
-            const sheet = workbook.sheet(0).name('Empty Folders');
+            const sheet = workbook.sheet(0).name('Lists Information');
             // generate headers
 
             let counterColumns = 0;
@@ -21,7 +21,29 @@ export function generateExcelListsInformation(data: any) {
             for (let item of data) {
                 for (let key of columns) {
                     let cell = convertNumber(counterColumns).toString() + counterItems;
-                    sheet.cell(cell).value(item[key]);
+                    switch (key) {
+                        case 'Title':
+                            sheet.cell(cell).value(item[key]);
+                            break;
+                        case 'Versioning Enabled':
+                            sheet.cell(cell).value(item.EnableVersioning);
+                            break;
+                        case 'Location':
+                            sheet.cell(cell).value(item.RootFolder.ServerRelativeUrl);
+                            break;
+                        case 'Column Types':
+                            var columnTypes = Array.from(
+                                new Set(item.Fields.results.filter((e: any) => e.CanBeDeleted)
+                                    .map((e: any) => e.TypeDisplayName))
+                            ).join(', ');
+                            sheet.cell(cell).value(columnTypes);
+                            break;
+                        case 'Existing Workflows':
+                            sheet.cell(cell).value(item.WorkflowAssociations.results.length);
+                            break;
+                        default:
+                            sheet.cell(cell).value(' ');
+                    }
                     counterColumns++;
                 }
                 counterColumns = 0;

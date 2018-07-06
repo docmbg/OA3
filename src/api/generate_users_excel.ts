@@ -7,7 +7,7 @@ export function generateExcelUsers(data: any) {
     const siteName = siteUrl.split('/')[siteUrl.split('/').length - 1];
     XlsxPopulate.fromBlankAsync()
         .then((workbook: any) => {
-            const sheet = workbook.sheet(0).name('Empty Folders');
+            const sheet = workbook.sheet(0).name('All Users');
             // generate headers
 
             let counterColumns = 0;
