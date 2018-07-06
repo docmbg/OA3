@@ -37,7 +37,7 @@ export async function getFolderUrisRecursive(guid: string, options: any) {
 }
 
 export async function getAllLists(url: string, options: any, libsOnly: boolean) {
-    const getListsUrl = `${url}/_api/Web/Lists/?$expand=RootFolder`;
+    const getListsUrl = `${url}/_api/Web/Lists/?$expand=Fields, RootFolder, WorkflowAssociations`;
     const lists = await fetch(getListsUrl, options).then(res => res.json())
         .catch(error => console.error('Error:', error))
         .then(response => {

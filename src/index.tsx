@@ -5,7 +5,8 @@ import App from './components/App';
 import EmptyFolderStage from './containers/empty_folders_stage';
 import MatrixStage from './containers/matrix';
 import UserAccessStage from './containers/permission_stage';
-import AllUsersStage from './containers/allusers';
+import AllUsersStage from './containers/all_users_stage';
+import ListsInformationStage from './containers/lists_information_stage';
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { customPromiseMiddleware } from './middleware/worker_middleware';
@@ -40,6 +41,7 @@ ReactDOM.render(
           <Route exact={true} path="/home/matrix" component={MatrixStage} />
           <Route exact={true} path="/home/allusers" component={AllUsersStage} />
           <Route exact={true} path="/home/folders" component={EmptyFolderStage} />
+          <Route exact={true} path="/home/lists" component={ListsInformationStage} />
         </Switch>
       </div>
     </Provider>

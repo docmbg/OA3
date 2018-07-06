@@ -2,7 +2,7 @@ import XlsxPopulate from 'xlsx-populate';
 import { siteUrl } from '../consts';
 import { convertNumber } from './helperFunctions';
 
-export function generateExcelUsers(data: any) {
+export function generateExcelListsInformation(data: any) {
     let columns = ['Title', 'Email', 'LoginName'];
     const siteName = siteUrl.split('/')[siteUrl.split('/').length - 1];
     XlsxPopulate.fromBlankAsync()
@@ -32,7 +32,7 @@ export function generateExcelUsers(data: any) {
             return workbook.outputAsync();
         }).then(function (blob: any) {
 
-            let nameOfFile = `All Users -${siteName}`;
+            let nameOfFile = `Lists Information -${siteName}`;
             if (window.navigator && window.navigator.msSaveOrOpenBlob) {
                 window.navigator.msSaveOrOpenBlob(blob, nameOfFile);
             } else {

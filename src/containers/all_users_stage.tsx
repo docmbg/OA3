@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Navigation from '../containers/navigation';
 import { generateExcelUsers } from '../api/generate_users_excel';
 
-class Matrix extends React.Component<any, any> {
+class AllUsersStage extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -39,4 +39,4 @@ function mapStateToProps({ users }: any) {
     };
 }
 
-export default connect(mapStateToProps, null)(Matrix);
+export default connect(mapStateToProps, null)(AllUsersStage);
