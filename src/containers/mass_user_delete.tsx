@@ -1,6 +1,10 @@
 import * as React from 'react';
 import Papa from 'papaparse';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import deleteUsers from '../actions/delete_users';
+import { siteUrl } from '../consts';
+import { updateDigest } from '../api/helperFunctions';
 
 class MassUserDelete extends React.Component<any, any> {
     constructor(props: any) {
@@ -9,6 +13,18 @@ class MassUserDelete extends React.Component<any, any> {
             valid: [],
             invalid: []
         };
+    }
+
+    onButtonClick() {
+        const that = this;
+        Promise.resolve(updateDigest(siteUrl)).then(
+            res => {
+                that.props.deleteUsers(
+                    that.state.valid,
+                    res
+                );
+            }
+        );
     }
 
     fileUpload(e: any) {
@@ -57,7 +73,10 @@ class MassUserDelete extends React.Component<any, any> {
                     <div className="col s5">
                         <h5>Valid Users</h5>
                         {valid.length > 0 ?
-                            valid.map((e: any, i: number) => <p key={i}>{e.Title}{e.Id}</p>)
+                            <div>
+                                <button onClick={() => this.onButtonClick()}>Delete Users</button>
+                                {valid.map((e: any, i: number) => <p key={i}>{e.Title}</p>)}
+                            </div>
                             :
                             <div />
 
@@ -83,4 +102,8 @@ function mapStateToProps({ users }: any) {
     };
 }
 
-export default connect(mapStateToProps)(MassUserDelete);
+function mapDispatchToPorps(dispatch: any) {
+    return bindActionCreators(deleteUsers, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToPorps)(MassUserDelete);

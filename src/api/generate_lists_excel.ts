@@ -1,7 +1,10 @@
 import XlsxPopulate from 'xlsx-populate';
+import { siteUrl } from '../consts';
+import { convertNumber } from './helperFunctions';
 
-export function generateExcelFile(data: any) {
-    let columns = Object.keys(data[0]);
+export function generateExcelListsInformation(data: any) {
+    let columns = ['Title', 'Email', 'LoginName'];
+    const siteName = siteUrl.split('/')[siteUrl.split('/').length - 1];
     XlsxPopulate.fromBlankAsync()
         .then((workbook: any) => {
             const sheet = workbook.sheet(0).name('Empty Folders');
@@ -29,7 +32,7 @@ export function generateExcelFile(data: any) {
             return workbook.outputAsync();
         }).then(function (blob: any) {
 
-            let nameOfFile = `Empty Folders.xlsx`;
+            let nameOfFile = `Lists Information -${siteName}`;
             if (window.navigator && window.navigator.msSaveOrOpenBlob) {
                 window.navigator.msSaveOrOpenBlob(blob, nameOfFile);
             } else {
@@ -43,16 +46,4 @@ export function generateExcelFile(data: any) {
                 document.body.removeChild(a);
             }
         });
-}
-
-function convertNumber(n: number) {
-    let ordA = 'A'.charCodeAt(0);
-    let ordZ = 'Z'.charCodeAt(0);
-    let len = ordZ - ordA + 1;
-    let s = '';
-    while (n >= 0) {
-        s = String.fromCharCode(n % len + ordA) + s;
-        n = Math.floor(n / len) - 1;
-    }
-    return s;
 }

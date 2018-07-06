@@ -1,4 +1,5 @@
 import XlsxPopulate from 'xlsx-populate';
+import { convertNumber } from './helperFunctions';
 
 export function generateExcelMatrix(data: any) {
     const { sites, uniqueGroups, usersByGroup, lists } = data;
@@ -95,16 +96,4 @@ export function generateExcelMatrix(data: any) {
                 document.body.removeChild(a);
             }
         });
-}
-
-function convertNumber(n: number) {
-    let ordA = 'A'.charCodeAt(0);
-    let ordZ = 'Z'.charCodeAt(0);
-    let len = ordZ - ordA + 1;
-    let s = '';
-    while (n >= 0) {
-        s = String.fromCharCode(n % len + ordA) + s;
-        n = Math.floor(n / len) - 1;
-    }
-    return s;
 }

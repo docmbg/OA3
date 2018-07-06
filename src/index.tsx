@@ -2,8 +2,12 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import reducers from './reducers/index';
 import App from './components/App';
-// import Matrix from './containers/matrix';
-// import UserAccess from './containers/permission_stage';
+import EmptyFolderStage from './containers/empty_folders_stage';
+import MatrixStage from './containers/matrix';
+import UserAccessStage from './containers/permission_stage';
+import AllUsersStage from './containers/all_users_stage';
+import ListsInformationStage from './containers/lists_information_stage';
+import MassUserDelete from './containers/mass_user_delete';
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { customPromiseMiddleware } from './middleware/worker_middleware';
@@ -33,7 +37,13 @@ ReactDOM.render(
     <Provider store={store}>
       <div>
         <Switch>
-           <Route exact={true} path="/home" component={App} />
+          <Route exact={true} path="/home" component={App} /> 
+          <Route exact={true} path="/home/useraccess" component={UserAccessStage} />
+          <Route exact={true} path="/home/matrix" component={MatrixStage} />
+          <Route exact={true} path="/home/allusers" component={AllUsersStage} />
+          <Route exact={true} path="/home/folders" component={EmptyFolderStage} />
+          <Route exact={true} path="/home/lists" component={ListsInformationStage} />
+          <Route exact={true} path="/home/massdelete" component={MassUserDelete} />
         </Switch>
       </div>
     </Provider>

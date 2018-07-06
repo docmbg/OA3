@@ -41,14 +41,14 @@ class Navigation extends React.Component<any, any> {
                     <LinearLoader />
                     :
                     <div>
-                        <Link to="/home/useraccess">Get Users</Link>
-                        <Link to="/home/massdelete">Get Users</Link>
-                        <Link to="/home/matrix">Get Users</Link>
-                        <Link to="/home/allusers">Get Users</Link>
-                        <Link to="/home/structure">Get Users</Link>
-                        <Link to="/home/folders">Get Users</Link>
-                        <Link to="/home/workflows">Get Users</Link>
-                        <Link to="/home/lists">Get Users</Link>
+                        <Link to="/home/useraccess">Access Management</Link>
+                        <Link to="/home/massdelete">Mass Delete</Link>
+                        <Link to="/home/matrix">Permission Matrix</Link>
+                        <Link to="/home/allusers">All Users</Link>
+                        <Link to="/home/structure">SharePoint Structure</Link>
+                        <Link to="/home/folders">Empty Folders</Link>
+                        <Link to="/home/workflows">Workflows</Link>
+                        <Link to="/home/lists">Lists Information</Link>
                     </div>
             }
             </div>

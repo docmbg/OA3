@@ -27,17 +27,17 @@ export async function getAllSubSites(url: string, arr: Array<Object>, mainUrl: s
 }
 
 export async function getFolderUrisRecursive(guid: string, options: any) {
-    const view = `ServerRelativeUrl&@v1={'ViewXml':'<View Scope='RecursiveAll'>` +
-        `<Query><Where><Eq><FieldRef Name='FSObjType' /><Value Type='Integer'>1</Value></Eq></Where></Query></View>'}`;
+    const view = `ServerRelativeUrl&@v1={"ViewXml":"<View Scope='RecursiveAll'>` +
+        `<Query><Where><Eq><FieldRef Name='FSObjType' /><Value Type='Integer'>1</Value></Eq></Where></Query></View>"}`;
     let folderURIs = await fetch(
-        `${guid}/GetItems(query=@v1)?$expand=Folder/` + `${view}`,
+        `${guid}/GetItems(query=@v1)?$expand=Folder/${view}`,
         options
     ).then(res => res.json()).then(res => res.d.results);
     return folderURIs;
 }
 
 export async function getAllLists(url: string, options: any, libsOnly: boolean) {
-    const getListsUrl = `${url}/_api/Web/Lists/?$expand=RootFolder`;
+    const getListsUrl = `${url}/_api/Web/Lists/?$expand=Fields, RootFolder, WorkflowAssociations`;
     const lists = await fetch(getListsUrl, options).then(res => res.json())
         .catch(error => console.error('Error:', error))
         .then(response => {
@@ -74,7 +74,7 @@ export function createFolderInformation(url: string, folders: Array<Object>, use
     for (let folder of folders) {
         let ph = {};
         ph[`Name`] = folder[`Folder`][`Name`];
-        ph[`URL`] = `${url}${folder[`Folder`][`ServerRelativeUrl`]}`;
+        ph[`URL`] = `${folder[`Folder`][`ServerRelativeUrl`]}`;
         ph[`Author`] = users.filter((e: Object) => e[`Id`] === folder[`AuthorId`])[0][`Email`];
         ph[`Modified By`] = users.filter((e: Object) => e[`Id`] === folder[`EditorId`])[0][`Email`];
         ph[`Created`] = new Date(folder[`Folder`][`TimeCreated`]).toLocaleDateString();
@@ -84,26 +84,15 @@ export function createFolderInformation(url: string, folders: Array<Object>, use
     return emptyFolders;
 }
 
-export async function getEmptyFolders(siteUrl: string, readOptions: any, requestDigest: string) {
-    let sites: any = [];
+export async function getEmptyFolders(sites: any, readOptions: any, postOptions: any) {
     let promises = [];
     let lists: any = [];
     let folders;
-    await getAllSubSites(siteUrl, sites, siteUrl, readOptions);
     for (let site of sites) {
-        promises.push(getAllLists(site, readOptions, true));
+        promises.push(getAllLists(site.url, readOptions, true));
     }
     await Promise.all(promises).then(res => lists = res);
     promises = [];
-    const postOptions: any = {
-        method: 'POST', // or 'PUT'
-        credentials: 'include',
-        headers: {
-            'Accept': 'application/json; odata=verbose',
-            'X-RequestDigest': requestDigest,
-            'content-type': 'application/json;odata=verbose'
-        }
-    };
     for (let i = 0; i < sites.length; i++) {
         for (let j = 0; j < lists[i].length; j++) {
             promises.push(getFolderUrisRecursive(lists[i][j][`__metadata`][`id`], postOptions));
@@ -264,23 +253,23 @@ export async function getWorkflows(sites: Array<string>, readOptions: any) {
 
 }
 
-export async function getVersioning(mainUrl: string, lists: any) {
-    let flatLists = [].concat.apply([], lists);
-    let checkedLists = [];
-    for (let list of flatLists) {
-        checkedLists.push({
-            'Name': list[`Title`],
-            'Url': `${mainUrl}/${list[`EntityTypeName`]}`,
-            'Enabled Versioning': list[`EnableVersioning`],
-            'Enabled Minor Versions': list[`EnableMinorVersions`]
-        });
-    }
-    return checkedLists;
-}
+// export async function getVersioning(mainUrl: string, lists: any) {
+//     let flatLists = [].concat.apply([], lists);
+//     let checkedLists = [];
+//     for (let list of flatLists) {
+//         checkedLists.push({
+//             'Name': list[`Title`],
+//             'Url': `${mainUrl}/${list[`EntityTypeName`]}`,
+//             'Enabled Versioning': list[`EnableVersioning`],
+//             'Enabled Minor Versions': list[`EnableMinorVersions`]
+//         });
+//     }
+//     return checkedLists;
+// }
 
-export default function deleteFolder(url: string, postOptions: any, mainUrl: string) {
+export function deleteFolder(url: string, postOptions: any, mainUrl: string) {
     postOptions.headers[`X-HTTP-Method`] = 'DELETE';
-    return fetch(`${mainUrl}/_api/web/GetFolderByServerRelativeUrl(${url})`, postOptions)
+    return fetch(`${mainUrl}/_api/web/GetFolderByServerRelativeUrl('${url}')`, postOptions)
         .then(res => res.text()).then(res => res);
 }
 
@@ -307,4 +296,16 @@ export async function updateDigest(url: string) {
         .then(res => res.d.GetContextWebInformation.FormDigestValue);
 
     return digest;
+}
+
+export function convertNumber(n: number) {
+    let ordA = 'A'.charCodeAt(0);
+    let ordZ = 'Z'.charCodeAt(0);
+    let len = ordZ - ordA + 1;
+    let s = '';
+    while (n >= 0) {
+        s = String.fromCharCode(n % len + ordA) + s;
+        n = Math.floor(n / len) - 1;
+    }
+    return s;
 }
