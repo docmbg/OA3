@@ -11,6 +11,8 @@ import EmptyFoldersReducer from './reducer_empty_folders';
 import DeleteEmptyFoldersReducer from './reducer_delete_empty_folders';
 import ListsReducer from './reducer_lists_information';
 import DeleteUsersReducer from './reducer_delete_users';
+import WorkflowsReducer from './reducer_workflows';
+import StructureReducer from './reducer_structure';
 
 const rootReducer: any = combineReducers({
     stage: StageReducer,
@@ -24,7 +26,9 @@ const rootReducer: any = combineReducers({
     emptyFolders: EmptyFoldersReducer,
     foldersDeleted: DeleteEmptyFoldersReducer,
     lists: ListsReducer,
-    deleteUsers: DeleteUsersReducer
+    deleteUsers: DeleteUsersReducer,
+    workflows: WorkflowsReducer,
+    structure: StructureReducer
 });
 
 export default rootReducer;

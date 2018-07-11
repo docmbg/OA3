@@ -2,7 +2,7 @@ import * as React from 'react';
 import Papa from 'papaparse';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { deleteUsers } from '../actions/delete_users';
+import {deleteUsers} from '../actions/delete_users';
 import { siteUrl } from '../consts';
 import { updateDigest } from '../api/helperFunctions';
 import Navigation from '../containers/navigation';
@@ -14,14 +14,14 @@ class MassUserDelete extends React.Component<any, any> {
         this.state = {
             valid: [],
             invalid: [],
-            loading: false
+            loaded: true
         };
     }
 
     onButtonClick() {
         const that = this;
         that.setState({
-            loading: true
+            loaded: false
         });
         Promise.resolve(updateDigest(siteUrl)).then(
             res => {
@@ -37,7 +37,7 @@ class MassUserDelete extends React.Component<any, any> {
         const file = e[0];
         const that = this;
         that.setState({
-            loading: false
+            loaded: false
         });
         
         Papa.parse(file, {
@@ -50,7 +50,7 @@ class MassUserDelete extends React.Component<any, any> {
                 for (let userForRemoval of data) {
                     match = false;
                     for (let userOnPlatform of that.props.users) {
-                        if (userOnPlatform.Email === userForRemoval) {
+                        if (userOnPlatform.Email === userForRemoval && userOnPlatform.Groups.results.length > 0) {
                             validPh.push(userOnPlatform);
                             match = true;
                             break;
@@ -75,7 +75,7 @@ class MassUserDelete extends React.Component<any, any> {
         let invalid = that.state.invalid;
         return (
             <div className="container">
-                <Navigation />
+            <Navigation/>
                 <div className="row">
                     <input onChange={(e) => this.onFileUpload(e.target.files)} type="file" />
                 </div>
@@ -86,7 +86,7 @@ class MassUserDelete extends React.Component<any, any> {
                             valid.length > 0 ?
                                 <div>
                                     {
-                                        !that.state.loading ?
+                                        that.state.loaded ?
                                             <button onClick={() => this.onButtonClick()}>Delete Users</button>
                                             :
                                             !that.props.deletedUsers ?
@@ -98,7 +98,7 @@ class MassUserDelete extends React.Component<any, any> {
                                         !that.props.deletedUsers ?
                                             valid.map((e: any, i: number) => <p key={i}>{e.Title}</p>)
                                             :
-                                            that.state.loading ?
+                                            !that.state.loaded ?
                                             <p>All done</p>
                                             :
                                             <div/>

@@ -11,6 +11,8 @@ import WorkerGenerateEmptyFolders from 'worker-loader!./generateEmptyFolders.ts'
 import WorkerDeleteEmptyFolders from 'worker-loader!./deleteEmptyFolders.ts';
 import WorkerGenerateListsInformation from 'worker-loader!./generateListsInformation.ts';
 import WorkerDeleteUsers from 'worker-loader!./deleteUsers.ts';
+import WorkerGenerateWorkflows from 'worker-loader!./generateWorkflows.ts';
+import WorkerStructure from 'worker-loader!./generateStructure.ts';
 
 import {
     ALL_USERS,
@@ -25,7 +27,9 @@ import {
     GENERATE_EMPTY_FOLDERS,
     DELETE_EMPTY_FOLDERS,
     GENERATE_LISTS_INFORMATION,
-    DELETE_USERS
+    DELETE_USERS,
+    GENERATE_WORKFLOWS,
+    GENERATE_STRUCTURE
 } from '../consts';
 
 const wAllUsers = new WorkerAllUsers();
@@ -38,6 +42,8 @@ const wGenerateEmptyFolders = new WorkerGenerateEmptyFolders();
 const wDeleteEmptyFolders = new WorkerDeleteEmptyFolders();
 const wGenerateListsInformation = new WorkerGenerateListsInformation();
 const wDeleteUsers = new WorkerDeleteUsers();
+const wGenerateWorkflows = new WorkerGenerateWorkflows();
+const wGenerateStructure = new WorkerStructure();
 
 export const customPromiseMiddleware = (store: any) => (next: any) => (action: any) => {
     console.log('Action', action);
@@ -99,6 +105,12 @@ export const customPromiseMiddleware = (store: any) => (next: any) => (action: a
             break;
         case DELETE_USERS:
             workerInit(wDeleteUsers, action, next);
+            break;
+        case GENERATE_WORKFLOWS:
+            workerInit(wGenerateWorkflows, action, next);
+            break;
+        case GENERATE_STRUCTURE:
+            workerInit(wGenerateStructure, action, next);
             break;
         default:
             break;

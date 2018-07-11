@@ -57,3 +57,21 @@
 
 .progress .indeterminate {
   background-color: #ffed00 !important; }
+
+select {
+  display: block !important; }
+
+.diagram {
+  width: 80%;
+  height: 80%;
+  position: fixed;
+  top: 15%;
+  left: 10%;
+  background-color: #FFF;
+  display: block; }
+
+.structure.container {
+  padding: 0% !important; }
+
+.structure.row {
+  margin-bottom: 0% !important; }

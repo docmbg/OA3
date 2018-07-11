@@ -1,25 +1,27 @@
 
 export async function getAllSubSites(url: string, arr: Array<Object>, mainUrl: string, options: any) {
     let promises: any = [];
-    let fetchUrl = url !== mainUrl ? url : `${mainUrl}/_api/Web/webs`;
+    let fetchUrl = url !== mainUrl ? url : `${mainUrl}/_api/Web/webs?$expand=webs`;
     if (arr.length === 0) {
-        let mainTitle = await fetch(`${mainUrl}/_api/web`, options)
+        let mainSite = await fetch(`${mainUrl}/_api/web?$expand=webs`, options)
             .then(res => res.json())
-            .then(res => res.d.Title);
+            .then(res => res);
         arr.push({
             url: mainUrl,
-            title: mainTitle
+            title: mainSite.d.Title,
+            children: mainSite.d.Webs.results.length
         });
     }
     await fetch(fetchUrl, options).then(res => res.json())
         .catch(error => console.error('Error:', error))
         .then(response => {
-            response.d.results.map((e: Object) => {
+            response.d.results.map((e: any) => {
                 arr.push({
-                    url: e[`Url`],
-                    title: e[`Title`]
+                    url: e.Url,
+                    title: e.Title,
+                    children: e.Webs.results.length
                 });
-                promises.push(getAllSubSites(`${e[`__metadata`][`uri`]}/webs`, arr, mainUrl, options));
+                promises.push(getAllSubSites(`${e[`__metadata`][`uri`]}/webs?$expand=webs`, arr, mainUrl, options));
 
             });
         });
@@ -211,12 +213,12 @@ export async function addRemoveUserToGroup
     return complete;
 }
 
-export async function getWorkflows(sites: Array<string>, readOptions: any) {
+export async function getWorkflows(sites: Array<any>, readOptions: any) {
     let promises = [];
     let workflowsLists: any = [];
     let workflows: any = [];
     for (let site of sites) {
-        promises.push(fetch(`${site}/_api/web/Lists/getByTitle('Workflows')`, readOptions)
+        promises.push(fetch(`${site.url}/_api/web/Lists/getByTitle('Workflows')`, readOptions)
             .then(res => res.json()).
             then(res => workflowsLists.push(res))
         );
@@ -276,7 +278,7 @@ export function deleteFolder(url: string, postOptions: any, mainUrl: string) {
 async function getAuthor(url: string, readOptions: any) {
     let author = await fetch(url, readOptions)
         .then(res => res.json())
-        .then(res => res.d.Email);
+        .then(res => res.d ? res.d.Email : 'User no longer exists');
     return author;
 }
 
