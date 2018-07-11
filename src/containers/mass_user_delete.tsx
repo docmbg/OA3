@@ -2,21 +2,27 @@ import * as React from 'react';
 import Papa from 'papaparse';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import deleteUsers from '../actions/delete_users';
+import { deleteUsers } from '../actions/delete_users';
 import { siteUrl } from '../consts';
 import { updateDigest } from '../api/helperFunctions';
+import Navigation from '../containers/navigation';
+import LinearLoader from '../components/loader';
 
 class MassUserDelete extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
             valid: [],
-            invalid: []
+            invalid: [],
+            loading: false
         };
     }
 
     onButtonClick() {
         const that = this;
+        that.setState({
+            loading: true
+        });
         Promise.resolve(updateDigest(siteUrl)).then(
             res => {
                 that.props.deleteUsers(
@@ -27,9 +33,13 @@ class MassUserDelete extends React.Component<any, any> {
         );
     }
 
-    fileUpload(e: any) {
+    onFileUpload(e: any) {
         const file = e[0];
         const that = this;
+        that.setState({
+            loading: false
+        });
+        
         Papa.parse(file, {
             complete: function (results: any) {
                 let validPh: any = [];
@@ -40,7 +50,6 @@ class MassUserDelete extends React.Component<any, any> {
                 for (let userForRemoval of data) {
                     match = false;
                     for (let userOnPlatform of that.props.users) {
-                        console.log(userForRemoval);
                         if (userOnPlatform.Email === userForRemoval) {
                             validPh.push(userOnPlatform);
                             match = true;
@@ -66,19 +75,37 @@ class MassUserDelete extends React.Component<any, any> {
         let invalid = that.state.invalid;
         return (
             <div className="container">
+                <Navigation />
                 <div className="row">
-                    <input onChange={(e) => this.fileUpload(e.target.files)} type="file" />
+                    <input onChange={(e) => this.onFileUpload(e.target.files)} type="file" />
                 </div>
                 <div className="row">
                     <div className="col s5">
                         <h5>Valid Users</h5>
-                        {valid.length > 0 ?
-                            <div>
-                                <button onClick={() => this.onButtonClick()}>Delete Users</button>
-                                {valid.map((e: any, i: number) => <p key={i}>{e.Title}</p>)}
-                            </div>
-                            :
-                            <div />
+                        {
+                            valid.length > 0 ?
+                                <div>
+                                    {
+                                        !that.state.loading ?
+                                            <button onClick={() => this.onButtonClick()}>Delete Users</button>
+                                            :
+                                            !that.props.deletedUsers ?
+                                                <LinearLoader />
+                                                :
+                                                <div />
+                                    }
+                                    {
+                                        !that.props.deletedUsers ?
+                                            valid.map((e: any, i: number) => <p key={i}>{e.Title}</p>)
+                                            :
+                                            that.state.loading ?
+                                            <p>All done</p>
+                                            :
+                                            <div/>
+                                    }
+                                </div>
+                                :
+                                <div />
 
                         }
                     </div>
@@ -96,14 +123,15 @@ class MassUserDelete extends React.Component<any, any> {
     }
 }
 
-function mapStateToProps({ users }: any) {
+function mapStateToProps({ users, deletedUsers }: any) {
     return {
-        users
+        users,
+        deletedUsers
     };
 }
 
 function mapDispatchToPorps(dispatch: any) {
-    return bindActionCreators(deleteUsers, dispatch);
+    return bindActionCreators({ deleteUsers }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToPorps)(MassUserDelete);
