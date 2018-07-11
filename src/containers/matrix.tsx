@@ -12,8 +12,15 @@ class Matrix extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            loaded: true,
+            displayLoader: false,
         };
+    }
+
+    onReadyClick() {
+        this.setState({
+            displayLoader: false,
+        });
+        this.props.generateMatrix(null);
     }
 
     onButtonClick() {
@@ -26,38 +33,41 @@ class Matrix extends React.Component<any, any> {
                     that.props.groups
                 );
                 that.setState({
-                    loaded: false,
+                    displayLoader: true,
                 });
             }
         );
     }
 
     render() {
-        let loaded = this.state.loaded || this.props.matrix.hasOwnProperty('lists');
-        if (this.props.matrix.hasOwnProperty('lists')) {
-            console.log(this.props.matrix);
+        let storeInfoReady = this.props.matrix.hasOwnProperty('lists');
+        if (storeInfoReady) {
             generateExcelMatrix(this.props.matrix);
         }
         return (
             <div className="container">
-                {this.props.sites.length === 0 ?
-                    (<Navigation />)
-                    :
+                <Navigation />
+                {this.props.sites.length !== 0 ?
                     (
                         <div>
-                            <Navigation />
-                            {
-                                loaded ?
+                            {!storeInfoReady ?
+
+                                storeInfoReady || this.state.displayLoader ?
+                                    <LinearLoader /> :
                                     <div onClick={() => this.onButtonClick()}>
                                         <i className="material-icons">save_alt</i>
                                         <button> Download matrix </button>
                                     </div>
-                                    :
-                                    <LinearLoader />
+                                :
+                                storeInfoReady && this.state.displayLoader ?
+                                    <div onClick={() => this.onReadyClick()}>Ready</div> :
+                                    <div />
                             }
 
                         </div>
                     )
+                    :
+                    <div />
                 }
 
             </div>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import Papa from 'papaparse';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {deleteUsers} from '../actions/delete_users';
+import { deleteUsers } from '../actions/delete_users';
 import { siteUrl } from '../consts';
 import { updateDigest } from '../api/helperFunctions';
 import Navigation from '../containers/navigation';
@@ -39,7 +39,7 @@ class MassUserDelete extends React.Component<any, any> {
         that.setState({
             loaded: false
         });
-        
+
         Papa.parse(file, {
             complete: function (results: any) {
                 let validPh: any = [];
@@ -75,7 +75,7 @@ class MassUserDelete extends React.Component<any, any> {
         let invalid = that.state.invalid;
         return (
             <div className="container">
-            <Navigation/>
+                <Navigation />
                 <div className="row">
                     <input onChange={(e) => this.onFileUpload(e.target.files)} type="file" />
                 </div>
@@ -99,9 +99,9 @@ class MassUserDelete extends React.Component<any, any> {
                                             valid.map((e: any, i: number) => <p key={i}>{e.Title}</p>)
                                             :
                                             !that.state.loaded ?
-                                            <p>All done</p>
-                                            :
-                                            <div/>
+                                                <p>All done</p>
+                                                :
+                                                <div />
                                     }
                                 </div>
                                 :
