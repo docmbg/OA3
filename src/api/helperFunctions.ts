@@ -311,3 +311,8 @@ export function convertNumber(n: number) {
     }
     return s;
 }
+
+export function getCurrentStage(currentUrl: string, stages: any) {
+    let urlHash = window.location.href.split('#')[1];
+    return stages[urlHash];
+}

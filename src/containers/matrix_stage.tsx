@@ -4,22 +4,14 @@ import { bindActionCreators } from 'redux';
 import { generateMatrix } from '../actions/generate_matrix';
 import { siteUrl } from '../consts';
 import { updateDigest } from '../api/helperFunctions';
-import Navigation from '../containers/navigation';
 import LinearLoader from '../components/loader';
-import { generateExcelMatrix } from '../api/generate_matrix_excel';
 
-class Matrix extends React.Component<any, any> {
+class MatrixStage extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
-        this.state = {
-            displayLoader: false,
-        };
     }
 
     onReadyClick() {
-        this.setState({
-            displayLoader: false,
-        });
         this.props.generateMatrix(null);
     }
 
@@ -32,36 +24,28 @@ class Matrix extends React.Component<any, any> {
                     that.props.sites,
                     that.props.groups
                 );
-                that.setState({
-                    displayLoader: true,
-                });
             }
         );
     }
 
     render() {
-        let storeInfoReady = this.props.matrix.hasOwnProperty('lists');
-        if (storeInfoReady) {
-            generateExcelMatrix(this.props.matrix);
-        }
+        let storeInfoReady = this.props.matrix.hasOwnProperty('data');
         return (
             <div className="container">
-                <Navigation />
-                {this.props.sites.length !== 0 ?
+                {this.props.users.length !== 0 ?
                     (
                         <div>
                             {!storeInfoReady ?
-
-                                storeInfoReady || this.state.displayLoader ?
+                                this.props.matrix.loading ?
                                     <LinearLoader /> :
                                     <div onClick={() => this.onButtonClick()}>
-                                        <i className="material-icons">save_alt</i>
-                                        <button> Download matrix </button>
+                                        <a className="waves-effect waves-light btn"> 
+                                            Download matrix 
+                                            <i className="material-icons">save_alt</i> 
+                                        </a>
                                     </div>
                                 :
-                                storeInfoReady && this.state.displayLoader ?
-                                    <div onClick={() => this.onReadyClick()}>Ready</div> :
-                                    <div />
+                                <div onClick={() => this.onReadyClick()}>Ready</div>
                             }
 
                         </div>
@@ -75,11 +59,12 @@ class Matrix extends React.Component<any, any> {
     }
 }
 
-function mapStateToProps({ sites, groups, matrix }: any) {
+function mapStateToProps({ sites, groups, matrix, users }: any) {
     return {
         sites,
         groups,
-        matrix
+        matrix,
+        users
     };
 }
 
@@ -87,4 +72,4 @@ function mapDispatchToProps(dispatch: any) {
     return bindActionCreators({ generateMatrix }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Matrix);
+export default connect(mapStateToProps, mapDispatchToProps)(MatrixStage);

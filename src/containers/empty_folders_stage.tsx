@@ -5,19 +5,24 @@ import { generateEmptyFolders } from '../actions/generate_empty_folders';
 import { deleteEmptyFolders } from '../actions/delete_empty_folders';
 import { siteUrl } from '../consts';
 import { updateDigest } from '../api/helperFunctions';
-import Navigation from '../containers/navigation';
 import LinearLoader from '../components/loader';
-import { generateEmptyFoldersExcel } from '../api/generate_empty_folders_excel';
 import Papa from 'papaparse';
 
 class EmptyFolderStage extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            loaded: true,
             urls: [],
             action: '',
         };
+    }
+
+    onReadyClick() {
+        // depending on state action call one or the other
+        this.state.action === 'get' ? this.props.generateEmptyFolders(null) : this.props.deleteEmptyFolders(null);
+        this.setState({
+            action: '',
+        });
     }
 
     onGetButtonClick() {
@@ -30,7 +35,6 @@ class EmptyFolderStage extends React.Component<any, any> {
                     this.props.users
                 );
                 that.setState({
-                    loaded: false,
                     action: 'get'
                 });
             }
@@ -46,7 +50,6 @@ class EmptyFolderStage extends React.Component<any, any> {
                     that.state.urls,
                 );
                 that.setState({
-                    loaded: false,
                     action: 'delete'
                 });
             }
@@ -69,46 +72,49 @@ class EmptyFolderStage extends React.Component<any, any> {
     }
 
     render() {
-        let loaded = this.state.loaded || this.props.emptyFolders.length !== 0 || this.props.foldersDeleted;
-        if (this.props.emptyFolders.length !== 0 && this.state.action === 'get') {
-            generateEmptyFoldersExcel(this.props.emptyFolders);
-        }
+        let currentAction = this.state.action;
+        let storeInfoReady = (this.props.emptyFolders.hasOwnProperty('data') !== 0 && currentAction === 'delete')
+            || (this.props.foldersDeleted.hasOwnProperty('data') && currentAction === 'get');
         return (
             <div className="container">
-                {this.props.sites.length === 0 ?
-                    (<Navigation />)
-                    :
-                    (
-                        <div>
-                            <Navigation />
-                            {
-                                loaded ?
-                                    <div>
-                                        <i className="material-icons">save_alt</i>
-                                        <button onClick={() => this.onGetButtonClick()}> Get empty folders </button>
-                                        <input onChange={(e) => this.onFileUpload(e.target.files)} type="file" />
-                                        {
-                                            this.state.urls.length === 0 ?
+                {this.props.users.length !== 0 ?
+
+                    <div>
+                        {
+                            !storeInfoReady ?
+                                <div>
+                                    {this.props.emptyFolders.loading || this.props.foldersDeleted.loading ?
+                                        <LinearLoader /> :
+                                        <div>
+                                            <i className="material-icons">save_alt</i>
+                                            <button onClick={() => this.onGetButtonClick()}> Get empty folders </button>
+                                            <input onChange={(e) => this.onFileUpload(e.target.files)} type="file" />
+
+                                            {this.state.urls.length === 0 ?
                                                 <div />
                                                 :
-                                                !this.props.foldersDeleted ?
+                                                !this.props.foldersDeleted.hasOwnProperty('data') ?
                                                     <button
                                                         onClick={
                                                             () => this.onDeleteButtonClick()
                                                         }
                                                     >
                                                         Delete Empty Folders
-                                                    </button> :
-                                                    <p>Folders  successfully Deleted</p>
-                                        }
+                                                    </button>
+                                                    :
+                                                    <div />
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                                :
+                                <div onClick={() => this.onReadyClick()}>Ready</div>
+                        }
 
-                                    </div>
-                                    :
-                                    <LinearLoader />
-                            }
+                    </div>
+                    :
+                    <div />
 
-                        </div>
-                    )
                 }
 
             </div>

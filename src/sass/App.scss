@@ -1,4 +1,4 @@
-@import 'contentSection.scss', 'variables.scss'; //insert variables everywhere you want to use DXC colours and other predifined features.
+@import 'contentSection.scss', 'variables.scss', 'navigation.scss'; //insert variables everywhere you want to use DXC colours and other predifined features.
 
 .App {
   text-align: center;
@@ -84,4 +84,12 @@ select {
   &.row {
     margin-bottom:0%!important;
   }
+}
+
+.dislpayedComponent {
+  display:block;
+}
+
+.hiddenComponent {
+  display: none;
 }

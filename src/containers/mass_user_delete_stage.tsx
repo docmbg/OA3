@@ -5,10 +5,9 @@ import { bindActionCreators } from 'redux';
 import { deleteUsers } from '../actions/delete_users';
 import { siteUrl } from '../consts';
 import { updateDigest } from '../api/helperFunctions';
-import Navigation from '../containers/navigation';
 import LinearLoader from '../components/loader';
 
-class MassUserDelete extends React.Component<any, any> {
+class MassUserDeleteStage extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -16,6 +15,10 @@ class MassUserDelete extends React.Component<any, any> {
             invalid: [],
             loaded: true
         };
+    }
+
+    onReadyClick() {
+        this.props.generateWorkflows(null);
     }
 
     onButtonClick() {
@@ -70,12 +73,12 @@ class MassUserDelete extends React.Component<any, any> {
     }
 
     render() {
+        let storeInfoReady = this.props.deletedUsers.usersLeft > 0;
         const that = this;
         let valid = that.state.valid;
         let invalid = that.state.invalid;
         return (
             <div className="container">
-                <Navigation />
                 <div className="row">
                     <input onChange={(e) => this.onFileUpload(e.target.files)} type="file" />
                 </div>
@@ -86,22 +89,16 @@ class MassUserDelete extends React.Component<any, any> {
                             valid.length > 0 ?
                                 <div>
                                     {
-                                        that.state.loaded ?
-                                            <button onClick={() => this.onButtonClick()}>Delete Users</button>
+                                        !storeInfoReady ?
+                                            this.props.deletedUsers.loading ?
+                                                <LinearLoader /> :
+                                                <div>
+                                                    {valid.map((e: any, i: number) => <p key={i}>{e.Title}</p>)}
+                                                    <button onClick={() => this.onButtonClick()}>Delete Users</button>
+                                                </div>
                                             :
-                                            !that.props.deletedUsers ?
-                                                <LinearLoader />
-                                                :
-                                                <div />
-                                    }
-                                    {
-                                        !that.props.deletedUsers ?
-                                            valid.map((e: any, i: number) => <p key={i}>{e.Title}</p>)
-                                            :
-                                            !that.state.loaded ?
-                                                <p>All done</p>
-                                                :
-                                                <div />
+                                            <div onClick={() => this.onReadyClick()}>Ready</div>
+
                                     }
                                 </div>
                                 :
@@ -134,4 +131,4 @@ function mapDispatchToPorps(dispatch: any) {
     return bindActionCreators({ deleteUsers }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToPorps)(MassUserDelete);
+export default connect(mapStateToProps, mapDispatchToPorps)(MassUserDeleteStage);

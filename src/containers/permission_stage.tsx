@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Navigation from './navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { setCurrentUser } from '../actions/set_current_user';
@@ -38,35 +37,31 @@ class UserAccess extends React.Component<any, any> {
     render() {
         return (
             <div className="container">
-                {this.props.sites.length === 0 ?
-                    (<Navigation />)
-                    :
-                    (
-                        
-                        <div>
-                            <Navigation />
-                            <div className="row">
-                                <input
-                                    value={this.state.value}
-                                    onChange={(e) => this.onInputChange(e)}
-                                    placeholder="User Email/Login"
-                                />
-                                <button onClick={(e: any) => this.onFormSubmit(e)}>Search</button>
-                                <div className="col s5">
-                                    <br />
-                                    <SitesComponent sites={this.props.sites} groups={this.props.groups} />
-                                </div>
+                {this.props.users.length !== 0 ?
+                    <div>
+                        <div className="row">
+                            <input
+                                value={this.state.value}
+                                onChange={(e) => this.onInputChange(e)}
+                                placeholder="User Email/Login"
+                            />
+                            <button onClick={(e: any) => this.onFormSubmit(e)}>Search</button>
+                            <div className="col s5">
+                                <br />
+                                <SitesComponent sites={this.props.sites} groups={this.props.groups} />
                             </div>
-
-                            <div className="col s5 offset-s1" />
-                            <ul>
-                                {this.props.currentUserGroups.map((e: Object, i: number) => {
-                                    return <li key={i}>{e[`Title`]}</li>;
-                                })}
-                            </ul>
-                            <CopyPermissions/>
                         </div>
-                    )
+
+                        <div className="col s5 offset-s1" />
+                        <ul>
+                            {this.props.currentUserGroups.map((e: Object, i: number) => {
+                                return <li key={i}>{e[`Title`]}</li>;
+                            })}
+                        </ul>
+                        <CopyPermissions />
+                    </div>
+                    :
+                    <div />
                 }
             </div>
         );

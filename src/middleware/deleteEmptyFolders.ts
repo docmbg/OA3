@@ -13,7 +13,10 @@ ctx.addEventListener('message', (event) => {
         .then(res => {
             ctx.postMessage({
                 type,
-                payload: res
+                payload: {
+                    data: true,
+                    loading: false
+                },
             });
         });
 });

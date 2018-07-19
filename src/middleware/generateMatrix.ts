@@ -14,7 +14,10 @@ ctx.addEventListener('message', (event) => {
             console.log('worker groups', res);
             ctx.postMessage({
                 type,
-                payload: res
+                payload: {
+                    data: res,
+                    loading: false,
+                }
             });
         });
 });

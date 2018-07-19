@@ -13,7 +13,10 @@ ctx.addEventListener('message', (event) => {
         .then(res => {
             ctx.postMessage({
                 type,
-                payload: res
+                payload: {
+                    loading: false,
+                    usersLeft: res,
+                }
             });
         });
 });
@@ -43,5 +46,5 @@ async function deleteUsers(users: Array<Object>, postOptions: any, siteUrl: stri
         }
 
     }
-    return true;
+    return 0;
 }

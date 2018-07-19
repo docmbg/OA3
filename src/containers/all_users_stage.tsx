@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Navigation from '../containers/navigation';
 import { generateExcelUsers } from '../api/generate_users_excel';
 
 class AllUsersStage extends React.Component<any, any> {
@@ -11,21 +10,39 @@ class AllUsersStage extends React.Component<any, any> {
         };
     }
 
+    onReadyClick() {
+        this.setState({
+            loaded: true,
+        });
+    }
+
+    onButtonClick() {
+        this.setState({
+            loaded: false,
+        });
+    }
+
     render() {
         return (
             <div className="container">
-                {this.props.users.length === 0 ?
-                    (<Navigation />)
-                    :
-                    (
+                {this.props.users.length !== 0 ?
+                    this.state.loaded ?
                         <div>
-                            <Navigation />
                             <div onClick={() => generateExcelUsers(this.props.users)}>
                                 <i className="material-icons">save_alt</i>
-                                <button> Get all users </button>
+                                <div onClick={() => this.onButtonClick()}>
+                                    <a className="waves-effect waves-light btn">
+                                        Get all users
+                                        <i className="material-icons">save_alt</i>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    )
+                        </div> :
+                        <div onClick={() => this.onReadyClick()}>Ready</div>
+
+                    :
+                    <div />
+
                 }
 
             </div>

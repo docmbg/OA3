@@ -1,0 +1,44 @@
+.topBanner {
+  position: fixed;
+  top: 0;
+  height: 30%; }
+
+.title {
+  position: fixed;
+  right: 0;
+  width: 20%;
+  top: 1%; }
+  .title .material-icons {
+    color: #ff009d;
+    position: relative;
+    top: -0.5em; }
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: fr;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite; }
+
+@-webkit-keyframes bounce {
+  0%, 100% {
+    -webkit-transform: translateY(0);
+    color: #bb00ff; }
+  50% {
+    -webkit-transform: translateY(-5px);
+    color: #00ff9d; } }
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    color: #bb00ff; }
+  50% {
+    transform: translateY(-5px);
+    color: #00ff9d; } }
+
+.bounce {
+  -webkit-animation-name: bounce;
+  animation-name: bounce; }

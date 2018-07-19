@@ -14,7 +14,10 @@ ctx.addEventListener('message', (event) => {
             let emptyFolders = createFolderInformation(paramUrl, res, users);
             ctx.postMessage({
                 type,
-                payload: emptyFolders
+                payload: {
+                    data: emptyFolders,
+                    loading: false
+                },
             });
         });
 });

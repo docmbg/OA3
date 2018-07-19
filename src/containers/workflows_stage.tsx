@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Navigation from '../containers/navigation';
-import { generateExcelWorkflows } from '../api/generate_workflows_excel';
 import { bindActionCreators } from 'redux';
 import { generateWorkflows } from '../actions/generate_workflows';
 import { siteUrl } from '../consts';
@@ -11,9 +9,10 @@ import LinearLoader from '../components/loader';
 class WorkflowsStage extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
-        this.state = {
-            loaded: true,
-        };
+    }
+
+    onReadyClick() {
+        this.props.generateWorkflows(null);
     }
 
     onButtonClick() {
@@ -24,43 +23,45 @@ class WorkflowsStage extends React.Component<any, any> {
                     res,
                     that.props.sites,
                 );
-                that.setState({
-                    loaded: false,
-                });
             }
         );
     }
 
     render() {
-        let loaded = this.state.loaded || this.props.workflows.length > 0;
-        if (this.props.workflows.length !== 0) {
-            generateExcelWorkflows(this.props.workflows);
-        }
+        let storeInfoReady = this.props.workflows.hasOwnProperty('data');
         return (
             <div className="container">
-                <div>
-                    <Navigation />
-                    {
-                        loaded ?
-                            <div onClick={() => this.onButtonClick()}>
-                                <i className="material-icons">save_alt</i>
-                                <button> Generate Worfklows </button>
-                            </div>
-                            :
-                            <LinearLoader />
-                    }
+                {this.props.users.length !== 0 ?
+                    (
+                        <div>
+                            {!storeInfoReady ?
+                                this.props.workflows.loading ?
+                                    <LinearLoader /> :
+                                    <div onClick={() => this.onButtonClick()}>
+                                        <a className="waves-effect waves-light btn">
+                                            Generate Workflows
+                                        <i className="material-icons">save_alt</i>
+                                        </a>
+                                    </div>
+                                :
+                                <div onClick={() => this.onReadyClick()}>Ready</div>
 
-                </div>
-
+                            }
+                        </div>
+                    )
+                    :
+                    <div />
+                }
             </div>
         );
     }
 }
 
-function mapStateToProps({ workflows, sites }: any) {
+function mapStateToProps({ workflows, sites, users }: any) {
     return {
         workflows,
-        sites
+        sites,
+        users
     };
 }
 

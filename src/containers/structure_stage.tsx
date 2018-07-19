@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { generateStructure } from '../actions/generate_structure';
 import { updateDigest } from '../api/helperFunctions';
 import LinearLoader from '../components/loader';
-import Navigation from '../containers/navigation';
 import { siteUrl, paramUrl } from '../consts';
 
 class StructureStage extends React.Component<any, any> {
@@ -13,6 +12,10 @@ class StructureStage extends React.Component<any, any> {
         this.state = {
             loaded: true,
         };
+    }
+
+    onReadyClick() {
+        this.props.generateStructure(null);
     }
 
     onButtonClick() {
@@ -29,28 +32,36 @@ class StructureStage extends React.Component<any, any> {
     }
 
     render() {
-        let loaded = this.state.loaded || this.props.structure.length > 0;
-        if (this.props.structure.length > 0) {
+        let storeInfoReady = this.props.structure.hasOwnProperty('data');
+        if (storeInfoReady) {
             let currentWindow: any = window.location.href.split('/');
             currentWindow.pop();
             currentWindow = currentWindow.join('/');
             window.open(`${currentWindow}/structure_page`);
-            localStorage.setItem('sites', JSON.stringify(this.props.structure));
+            localStorage.setItem('sites', JSON.stringify(this.props.structure.data));
         }
         return (
             <div>
-                {this.props.sites.length === 0 ?
-                    (<Navigation />)
-                    :
-                    loaded ?
+                {this.props.users.length !== 0 ?
+                    (
                         <div>
-                            <Navigation />
-                            <div>
-                                <button onClick={() => this.onButtonClick()}>Get structure</button>
-                            </div>
+                            {!storeInfoReady ?
+                                this.props.structure.loading ?
+                                    <LinearLoader /> :
+                                    <div onClick={() => this.onButtonClick()}>
+                                        <a className="waves-effect waves-light btn">
+                                            Generate Structure
+                                        <i className="material-icons">save_alt</i>
+                                        </a>
+                                    </div>
+                                :
+                                <div onClick={() => this.onReadyClick()}>Ready</div>
+
+                            }
                         </div>
-                        :
-                        <LinearLoader />
+                    )
+                    :
+                    <div />
                 }
 
             </div>
@@ -59,10 +70,11 @@ class StructureStage extends React.Component<any, any> {
     }
 }
 
-function mapStateToProps({ structure, sites }: any) {
+function mapStateToProps({ structure, sites, users }: any) {
     return {
         structure,
-        sites
+        sites,
+        users,
     };
 }
 
