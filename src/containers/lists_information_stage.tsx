@@ -12,8 +12,15 @@ class ListsInformationStage extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            loaded: true,
+            displayLoader: false,
         };
+    }
+
+    onReadyClick() {
+        this.setState({
+            displayLoader: false,
+        });
+        this.props.generateListsInformation(null);
     }
 
     onButtonClick() {
@@ -25,33 +32,39 @@ class ListsInformationStage extends React.Component<any, any> {
                     that.props.sites,
                 );
                 that.setState({
-                    loaded: false,
+                    displayLoader: true,
                 });
             }
         );
     }
 
     render() {
-        let loaded = this.state.loaded || this.props.lists.length > 0;
-        if (this.props.lists.length !== 0) {
+        let storeInfoReady = this.props.lists.length > 0;
+        if (storeInfoReady) {
             generateExcelListsInformation(this.props.lists);
         }
         return (
             <div className="container">
-                <div>
                     <Navigation />
-                    {
-                        loaded ?
+                {this.props.users.length !== 0 ?
+                    (
+                        <div>
+                            {!storeInfoReady ?
+                                this.state.displayLoader ?
+                                    <LinearLoader /> :
                             <div onClick={() => this.onButtonClick()}>
                                 <i className="material-icons">save_alt</i>
                                 <button> Generate Lists Information </button>
                             </div>
                             :
-                            <LinearLoader />
+                                <div onClick={() => this.onReadyClick()}>Ready</div> :
+
                     }
-
                 </div>
-
+                    )
+                    :
+                    <div />
+                }
             </div>
         );
     }
