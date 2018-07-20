@@ -38,13 +38,16 @@ class WorkflowsStage extends React.Component<any, any> {
                                 this.props.workflows.loading ?
                                     <LinearLoader /> :
                                     <div onClick={() => this.onButtonClick()}>
-                                        <a className="waves-effect waves-light btn">
+                                        <a className="waves-effect waves-black btn">
                                             Generate Workflows
                                         <i className="material-icons">save_alt</i>
                                         </a>
                                     </div>
                                 :
-                                <div onClick={() => this.onReadyClick()}>Ready</div>
+                                <div className="ready" onClick={() => this.onReadyClick()}>
+                                    <li><i className="material-icons">done</i></li>
+                                    <span>Ready</span>
+                                </div>
 
                             }
                         </div>

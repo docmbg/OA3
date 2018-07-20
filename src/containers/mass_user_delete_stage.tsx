@@ -97,7 +97,10 @@ class MassUserDeleteStage extends React.Component<any, any> {
                                                     <button onClick={() => this.onButtonClick()}>Delete Users</button>
                                                 </div>
                                             :
-                                            <div onClick={() => this.onReadyClick()}>Ready</div>
+                                            <div className="ready" onClick={() => this.onReadyClick()}>
+                                                <li><i className="material-icons">done</i></li>
+                                                <span>Ready</span>
+                                            </div>
 
                                     }
                                 </div>

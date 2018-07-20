@@ -31,15 +31,17 @@ class AllUsersStage extends React.Component<any, any> {
                             <div onClick={() => generateExcelUsers(this.props.users)}>
                                 <i className="material-icons">save_alt</i>
                                 <div onClick={() => this.onButtonClick()}>
-                                    <a className="waves-effect waves-light btn">
+                                    <a className="waves-effect waves-black btn">
                                         Get all users
                                         <i className="material-icons">save_alt</i>
                                     </a>
                                 </div>
                             </div>
                         </div> :
-                        <div onClick={() => this.onReadyClick()}>Ready</div>
-
+                        <div className="ready" onClick={() => this.onReadyClick()}>
+                            <li><i className="material-icons">done</i></li>
+                            <span>Ready</span>
+                        </div>
                     :
                     <div />
 

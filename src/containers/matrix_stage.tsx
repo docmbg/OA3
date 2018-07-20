@@ -39,13 +39,16 @@ class MatrixStage extends React.Component<any, any> {
                                 this.props.matrix.loading ?
                                     <LinearLoader /> :
                                     <div onClick={() => this.onButtonClick()}>
-                                        <a className="waves-effect waves-light btn"> 
-                                            Download matrix 
-                                            <i className="material-icons">save_alt</i> 
+                                        <a className="waves-effect waves-black btn">
+                                            Download matrix
+                                            <i className="material-icons">save_alt</i>
                                         </a>
                                     </div>
                                 :
-                                <div onClick={() => this.onReadyClick()}>Ready</div>
+                                <div className="ready" onClick={() => this.onReadyClick()}>
+                                    <li><i className="material-icons">done</i></li>
+                                    <span>Ready</span>
+                                </div>
                             }
 
                         </div>

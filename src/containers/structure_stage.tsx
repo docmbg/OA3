@@ -49,13 +49,16 @@ class StructureStage extends React.Component<any, any> {
                                 this.props.structure.loading ?
                                     <LinearLoader /> :
                                     <div onClick={() => this.onButtonClick()}>
-                                        <a className="waves-effect waves-light btn">
+                                        <a className="waves-effect waves-black btn">
                                             Generate Structure
                                         <i className="material-icons">save_alt</i>
                                         </a>
                                     </div>
                                 :
-                                <div onClick={() => this.onReadyClick()}>Ready</div>
+                                <div className="ready" onClick={() => this.onReadyClick()}>
+                                    <li><i className="material-icons">done</i></li>
+                                    <span>Ready</span>
+                                </div>
 
                             }
                         </div>

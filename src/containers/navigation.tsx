@@ -7,6 +7,8 @@ import { getAllGroups } from '../actions/get_groups';
 import { getAllSites } from '../actions/get_sites';
 import stages from '../api/stages';
 import top_banner from '../assets/top_banner.svg';
+import Modal from '@material-ui/core/Modal';
+
 // import { siteUrl } from '../consts';
 // import { updateDigest } from '../api/helperFunctions';
 // import LinearLoader from '../components/loader';
@@ -15,7 +17,7 @@ class Navigation extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
-            cakeClass: 'material-icons animated bounce'
+            modalStatus: false,
         };
     }
 
@@ -32,20 +34,10 @@ class Navigation extends React.Component<any, any> {
     //     }
     // }
 
-    componentDidMount() {
-        let that = this;
-        const cakeInterval: any = setInterval(
-            () => {
-                that.setState({
-                    cakeClass: that.state.cakeClass === 'material-icons animated bounce' ?
-                        'material-icons' : 'material-icons animated bounce'
-                });
-                if (that.state.cakeClass === '') {
-                    clearInterval(cakeInterval);
-                }
-            },
-            3000
-        );
+    handleModal(term: boolean) {
+        this.setState({
+            modalStatus: term,
+        });
     }
 
     changeStage(data: string) {
@@ -55,15 +47,21 @@ class Navigation extends React.Component<any, any> {
     render() {
         return (
             <div>
-
                 <img className="topBanner" src={top_banner} />
                 <div className="title">
-                    <h4> ONE ACCESS V3 <i className={this.state.cakeClass}>cake</i>
+                    <h4> ONE ACCESS v3 
+                        <i onClick={() => this.handleModal(true)} className="material-icons animated bounce">cake</i>
                     </h4>
 
                 </div>
-                <div className="valign-wrapper stage z-depth-1">
-
+                
+                <div className="valign-wrapper stage">
+                    <Modal 
+                        open={this.state.modalStatus}
+                        onClose={() => this.handleModal(false)}
+                    >
+                        <p>Hello Modal</p>
+                    </Modal>
                     <div className="container">
                         {
                             // this.props.sites.length === 0 ?
@@ -75,16 +73,20 @@ class Navigation extends React.Component<any, any> {
                                         Object.keys(stages).map((e: any) => {
                                             if (e !== 'structurePage') {
                                                 return (
-                                                    <li><a
-                                                        className="tooltipped"
+                                                    <li
+                                                        className="tooltipped 
+                                                        waves-effect waves-yellow waves-ripple"
                                                         data-position="bottom"
                                                         data-delay="50"
                                                         data-tooltip={stages[e][`tooltip`]}
-                                                        onClick={() => this.changeStage(e)}
-                                                        key={e}
                                                     >
-                                                        {stages[e][`icon`]}
-                                                    </a></li>
+                                                        <a
+                                                            onClick={() => this.changeStage(e)}
+                                                            key={e}
+                                                        >
+                                                            {stages[e][`icon`]}
+                                                        </a>
+                                                    </li>
                                                 );
                                             } else {
                                                 return;
@@ -94,6 +96,16 @@ class Navigation extends React.Component<any, any> {
                                 </ul>
                             </div>
                         }
+                        <div >
+                            <a className="waves-effect waves-black btn"> 
+                                <p>Download matrix  <i className="material-icons">save_alt</i></p>
+                            </a>
+                        </div>
+                        <div className="ready">
+                            <li><i className="material-icons">done</i></li>
+                            <span>Ready</span>
+                        </div>
+
                     </div>
                 </div>
             </div>
