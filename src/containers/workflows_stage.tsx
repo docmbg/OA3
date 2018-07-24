@@ -39,8 +39,10 @@ class WorkflowsStage extends React.Component<any, any> {
                                     <LinearLoader /> :
                                     <div onClick={() => this.onButtonClick()}>
                                         <a className="waves-effect waves-black btn">
-                                            Generate Workflows
-                                        <i className="material-icons">save_alt</i>
+                                            <p className="download">
+                                                GENERATE WORKFLOWS
+                                            <i className="material-icons">save_alt</i>
+                                            </p>
                                         </a>
                                     </div>
                                 :

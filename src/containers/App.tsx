@@ -3,18 +3,7 @@ import '../sass/App.css';
 import { connect } from 'react-redux';
 import Navigation from '../containers/navigation';
 import StructurePage from '../containers/structure_page';
-
-// const stages = {
-//   'useraccess': <UserAccessStage />,
-//   'massdelete': <MassUserDeleteStage />,
-//   'matrix': <MatrixStage />,
-//   'allusers': <AllUsersStage />,
-//   'structure': <StructureStage />,
-//   'folders': <EmptyFolderStage />,
-//   'workflows': <WorkflowsStage />,
-//   'lists': <ListsInformationStage />,
-//   'structurePage': <StructurePage />
-// };
+import stages from '../api/stages';
 
 class App extends React.Component<any, any> {
   constructor(props: any) {
@@ -22,7 +11,7 @@ class App extends React.Component<any, any> {
   }
 
   render() {
-    // let that = this;
+    let that = this;
 
     return (
       <div>
@@ -31,15 +20,15 @@ class App extends React.Component<any, any> {
           :
           <div>
             <Navigation />
-            {/* <div>
+            <div className="currentStage">
               {
                 this.props.groups.length > 0 ?
                   Object.keys(stages).map((e: any) => {
                     let currentStage = that.props.stage;
                     if (currentStage === e) {
                       return (
-                        <div className="dislpayedComponent">
-                          {stages[e]}
+                        <div>
+                          {stages[e][`component`]}
                         </div>
                       );
                     } else {
@@ -49,7 +38,7 @@ class App extends React.Component<any, any> {
                   :
                   <div />
               }
-            </div> */}
+            </div>
           </div>
         }
       </div>

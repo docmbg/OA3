@@ -39,8 +39,10 @@ class ListsInformationStage extends React.Component<any, any> {
                                     <LinearLoader /> :
                                     <div onClick={() => this.onButtonClick()}>
                                         <a className="waves-effect waves-black btn">
-                                            Generate Lists Information
+                                            <p className="download">
+                                                GENERATE LISTS INFORMATION
                                         <i className="material-icons">save_alt</i>
+                                            </p>
                                         </a>
                                     </div>
                                 :

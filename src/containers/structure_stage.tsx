@@ -50,8 +50,10 @@ class StructureStage extends React.Component<any, any> {
                                     <LinearLoader /> :
                                     <div onClick={() => this.onButtonClick()}>
                                         <a className="waves-effect waves-black btn">
-                                            Generate Structure
-                                        <i className="material-icons">save_alt</i>
+                                            <p className="download">
+                                                GENERATE STRUCTURE
+                                            <i className="material-icons">save_alt</i>
+                                            </p>
                                         </a>
                                     </div>
                                 :

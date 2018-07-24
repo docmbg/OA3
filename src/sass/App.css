@@ -7,7 +7,7 @@
   padding: 10%; }
 
 .topBanner {
-  position: fixed;
+  position: relative;
   top: 0;
   height: 25%;
   max-width: 100%; }
@@ -35,6 +35,11 @@ li {
     font-size: 2.5em;
     color: white; }
 
+h4 div {
+  margin-left: 7.5em;
+  margin-top: -1em;
+  cursor: pointer; }
+
 p {
   font-size: 1.5em; }
   p .material-icons {
@@ -44,10 +49,10 @@ p {
   padding: 0% !important; }
 
 .title {
-  position: fixed;
-  right: 0;
+  position: absolute;
+  left: 80%;
   width: 20%;
-  top: 1%; }
+  top: 1em; }
   .title .material-icons {
     color: #ff009d;
     position: relative;
@@ -114,11 +119,12 @@ p {
   -webkit-animation-name: bounce;
   animation-name: bounce; }
 
-.stage {
+.topNavigation {
   position: absolute;
   text-align: center;
-  top: 13%;
-  width: 100%; }
+  width: 100%;
+  padding: -1%;
+  top: 7em; }
 
 .waves-effect.waves-black .waves-ripple {
   /* The alpha value allows the text and background color
@@ -208,3 +214,16 @@ select {
 
 .hiddenComponent {
   display: none; }
+
+.currentStage {
+  position: relative;
+  margin-top: 5%;
+  text-align: center; }
+
+.download {
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 1.5em;
+  vertical-align: middle; }
+  .download .material-icons {
+    font-size: 1.1em; }

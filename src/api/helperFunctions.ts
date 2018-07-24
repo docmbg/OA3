@@ -316,3 +316,24 @@ export function getCurrentStage(currentUrl: string, stages: any) {
     let urlHash = window.location.href.split('#')[1];
     return stages[urlHash];
 }
+
+export function currentUserHasBirthday(name: string, entries: Array<any>) {
+    // entries = all people who have birthday today
+    const namesOfUser = name.replace(/,/g, '').split(' ');
+    entries = entries.map((e: string) => e.split(' '));
+    let flag = 0;
+    for (let entry of entries) {
+        flag = 0;
+        for (let n of namesOfUser) {
+            entry.includes(n) ? flag += 1 : flag += 0;
+        }
+        if (flag === 2) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// export function peopleWithBirthdays(entries: any){
+
+// }

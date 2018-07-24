@@ -40,8 +40,10 @@ class MatrixStage extends React.Component<any, any> {
                                     <LinearLoader /> :
                                     <div onClick={() => this.onButtonClick()}>
                                         <a className="waves-effect waves-black btn">
-                                            Download matrix
+                                            <p className="download">
+                                                Download matrix
                                             <i className="material-icons">save_alt</i>
+                                            </p>
                                         </a>
                                     </div>
                                 :

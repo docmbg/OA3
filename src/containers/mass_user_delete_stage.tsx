@@ -80,7 +80,17 @@ class MassUserDeleteStage extends React.Component<any, any> {
         return (
             <div className="container">
                 <div className="row">
-                    <input onChange={(e) => this.onFileUpload(e.target.files)} type="file" />
+                    <form action="#">
+                        <div className="file-field input-field">
+                            <div className="btn">
+                                <span>File</span>
+                                <input type="file" onChange={(e) => this.onFileUpload(e.target.files)}/>
+                            </div>
+                            <div className="file-path-wrapper">
+                                <input className="file-path validate" type="text" />
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div className="row">
                     <div className="col s5">

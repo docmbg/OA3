@@ -1,5 +1,5 @@
 .topBanner {
-    position: fixed;
+    position: relative;
     top: 0;
     height: 25%;
     max-width: 100%;
@@ -33,6 +33,14 @@ li {
     }
 }
 
+h4 {
+  div {
+    margin-left: 7.5em;
+    margin-top: -1em;
+    cursor: pointer;
+  }
+}
+
 p {
   font-size:1.5em;
   .material-icons {
@@ -45,10 +53,10 @@ p {
 }
 
 .title {
-    position: fixed;
-    right: 0;
-    width: 20%;
-    top: 1%;
+  position: absolute;
+  left: 80%;
+  width: 20%;
+  top: 1em;
     .material-icons {
         color: #ff009d;
         position: relative;
@@ -145,11 +153,12 @@ p {
     animation-name: bounce;
   }
   
-  .stage {
-  position: absolute;
-  text-align: center;
-  top: 13%;
-  width: 100%;
+  .topNavigation {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    padding: -1%;
+    top: 7em;
   }
 
   .waves-effect.waves-black .waves-ripple {

@@ -86,9 +86,28 @@ class EmptyFolderStage extends React.Component<any, any> {
                                     {this.props.emptyFolders.loading || this.props.foldersDeleted.loading ?
                                         <LinearLoader /> :
                                         <div>
+                                            <div onClick={() => this.onGetButtonClick()}>
+                                                <a className="waves-effect waves-black btn">
+                                                    <p className="download">
+                                                        GET EMPTY FOLDERS
                                             <i className="material-icons">save_alt</i>
-                                            <button onClick={() => this.onGetButtonClick()}> Get empty folders </button>
-                                            <input onChange={(e) => this.onFileUpload(e.target.files)} type="file" />
+                                                    </p>
+                                                </a>
+                                            </div>
+                                            <form action="#">
+                                                <div className="file-field input-field">
+                                                    <div className="btn">
+                                                        <span>File</span>
+                                                        <input 
+                                                            onChange={(e) => this.onFileUpload(e.target.files)} 
+                                                            type="file" 
+                                                        />
+                                                    </div>
+                                                    <div className="file-path-wrapper">
+                                                        <input className="file-path validate" type="text" />
+                                                    </div>
+                                                </div>
+                                            </form>
 
                                             {this.state.urls.length === 0 ?
                                                 <div />
