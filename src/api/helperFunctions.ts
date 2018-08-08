@@ -317,12 +317,13 @@ export function getCurrentStage(currentUrl: string, stages: any) {
     return stages[urlHash];
 }
 
-export function currentUserHasBirthday(name: string, entries: Array<any>) {
+export async function currentUserHasBirthday(url: string, birthdays: Array<any>, readOptions: any) {
+    const name = await fetch(`${url}/_api/web/currentuser`, readOptions).then(res => res.json()).then(res => res.d.Title);
     // entries = all people who have birthday today
     const namesOfUser = name.replace(/,/g, '').split(' ');
-    entries = entries.map((e: string) => e.split(' '));
+    birthdays = birthdays.map((e: string) => e[`Title`].split(' '));
     let flag = 0;
-    for (let entry of entries) {
+    for (let entry of birthdays) {
         flag = 0;
         for (let n of namesOfUser) {
             entry.includes(n) ? flag += 1 : flag += 0;
@@ -334,6 +335,16 @@ export function currentUserHasBirthday(name: string, entries: Array<any>) {
     return false;
 }
 
-// export function peopleWithBirthdays(entries: any){
-
-// }
+export async function peopleWithBirthdays(readOptions: any) {
+    let birthdays = await fetch(
+        `https://dxcportal.sharepoint.com/sites/DOCM222/TeamSites/_api/Web/Lists/getByTitle('Birthday & Special Events Calendar')/Items`,
+        readOptions).then(res => res.json()).then(res => res.d.results);
+    const day = new Date().getDate();
+    const month = new Date().getMonth();
+    const year = new Date().getFullYear();
+    birthdays = birthdays.filter((e: any) => {
+        let dateToCheck = new Date(`${e[`Month_x003a_`]}/${e[`Date`]}/${year}`);
+        return dateToCheck.getDate() === day && dateToCheck.getMonth() === month;
+    });
+    return birthdays;
+}

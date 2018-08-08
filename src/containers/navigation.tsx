@@ -8,15 +8,18 @@ import { getAllSites } from '../actions/get_sites';
 import stages from '../api/stages';
 import top_banner from '../assets/top_banner.svg';
 import { Modal } from 'react-materialize';
-import { siteUrl } from '../consts';
-import { updateDigest } from '../api/helperFunctions';
 import LinearLoader from '../components/loader';
+import { currentUserHasBirthday, peopleWithBirthdays, updateDigest } from '../api/helperFunctions';
+import { readOptions, siteUrl } from '../consts';
+import birthdayPic from '../assets/bdlogo.jpg';
 
 class Navigation extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
             modalStatus: false,
+            birthdayNames: '',
+            userBirthday: false,
         };
     }
 
@@ -26,11 +29,22 @@ class Navigation extends React.Component<any, any> {
         if (this.props.sites.length === 0) {
             Promise.resolve(updateDigest(siteUrl))
                 .then(res => {
+                    
                     that.props.getAllSites(res);
                     that.props.getAllGroups(res);
                     that.props.getAllUsers(res);
+                    Promise.resolve(peopleWithBirthdays( readOptions )).then( birthdays => {
+                        Promise.resolve(currentUserHasBirthday(siteUrl, birthdays, readOptions)).then(userBirthday => {
+                            const birthdayNames = birthdays.map( (e: any) => e[`Title`]).join(', ');
+                            that.setState({
+                                birthdayNames,
+                                userBirthday
+                            });
+                        });
+                    });
                 });
         }
+        
     }
 
     // handleModal(term: boolean) {
@@ -50,6 +64,19 @@ class Navigation extends React.Component<any, any> {
                 <LinearLoader /> 
                 :
                 <div>
+                    {this.state.userBirthday ?
+                        <Modal
+                                open={true}
+                        >
+                            <p>
+                                <img src={birthdayPic}/>
+                                <p>HAPPY BIRTHDAY!</p>
+                                <p>Best wishes from Tech Team</p>
+                            </p>
+                        </Modal>
+                        :
+                        <div/>
+                    }
                     <img className="topBanner" src={top_banner} />
                     <div className="title">
                         <h4> ONE ACCESS v3 
@@ -62,12 +89,9 @@ class Navigation extends React.Component<any, any> {
                             trigger={<i className="material-icons animated bounce">cake</i>}
                         >
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi 
-                            ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in 
-                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+                            <img src={birthdayPic}/>
+                            <p>Happy birthday to {this.state.birthdayNames}!</p>
+                            <p>Best wishes from Tech Team</p>
                         </p>
                         </Modal>
                         
@@ -120,14 +144,14 @@ class Navigation extends React.Component<any, any> {
     }
 }
 
-function mapDispatchhrefProps(dispatch: any) {
+function mapDispatchToProps(dispatch: any) {
     return bindActionCreators({ setStage, getAllUsers, getAllGroups, getAllSites }, dispatch);
 }
 
-function mapStatehrefProps({ sites }: any) {
+function mapStateToProps({ sites }: any) {
     return {
         sites
     };
 }
 
-export default connect(mapStatehrefProps, mapDispatchhrefProps)(Navigation);
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation);

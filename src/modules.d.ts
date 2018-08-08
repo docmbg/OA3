@@ -5,6 +5,7 @@ declare module 'react-redux';
 declare module 'redux-thunk';
 declare module 'papaparse';
 declare module '*.svg';
+declare module '*.jpg';
 // declare module 'redux';
 declare module 'connected-react-router';
 declare module 'react-materialize';

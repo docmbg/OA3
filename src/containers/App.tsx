@@ -3,7 +3,7 @@ import '../sass/App.css';
 import { connect } from 'react-redux';
 import Navigation from '../containers/navigation';
 import StructurePage from '../containers/structure_page';
-import stages from '../api/stages';
+// import stages from '../api/stages';
 
 class App extends React.Component<any, any> {
   constructor(props: any) {
@@ -11,7 +11,7 @@ class App extends React.Component<any, any> {
   }
 
   render() {
-    let that = this;
+    // let that = this;
 
     return (
       <div>
@@ -20,7 +20,7 @@ class App extends React.Component<any, any> {
           :
           <div>
             <Navigation />
-            <div className="currentStage">
+            {/* <div className="currentStage">
               {
                 this.props.groups.length > 0 ?
                   Object.keys(stages).map((e: any) => {
@@ -38,7 +38,7 @@ class App extends React.Component<any, any> {
                   :
                   <div />
               }
-            </div>
+            </div> */}
           </div>
         }
       </div>
