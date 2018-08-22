@@ -101,9 +101,7 @@ export async function getEmptyFolders(sites: any, readOptions: any, postOptions:
         }
     }
     await Promise.all(promises).then(res => folders = res);
-    console.log(folders);
     let emptyFolders = [].concat.apply([], folders).filter((e: Object) => e[`Folder`][`ItemCount`] === 0);
-    console.log(emptyFolders);
     return emptyFolders;
 }
 

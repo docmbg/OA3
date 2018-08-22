@@ -36,6 +36,14 @@ class MassUserDeleteStage extends React.Component<any, any> {
         );
     }
 
+    removeFromValid(e: any) {
+        let newValid = this.state.valid;
+        newValid.splice(parseInt(e.id, 10), 1);
+        this.setState({
+            valid: newValid
+        });
+    }
+
     onFileUpload(e: any) {
         const file = e[0];
         const that = this;
@@ -81,10 +89,10 @@ class MassUserDeleteStage extends React.Component<any, any> {
             <div className="container">
                 <div className="row">
                     <form action="#">
-                        <div className="file-field input-field">
+                        <div className="file-field input-field col s3 offset-s4">
                             <div className="btn">
                                 <span>File</span>
-                                <input type="file" onChange={(e) => this.onFileUpload(e.target.files)}/>
+                                <input type="file" onChange={(e) => this.onFileUpload(e.target.files)} />
                             </div>
                             <div className="file-path-wrapper">
                                 <input className="file-path validate" type="text" />
@@ -99,12 +107,27 @@ class MassUserDeleteStage extends React.Component<any, any> {
                             valid.length > 0 ?
                                 <div>
                                     {
-                                        !storeInfoReady ?
+                                        storeInfoReady ?
                                             this.props.deletedUsers.loading ?
                                                 <LinearLoader /> :
-                                                <div>
-                                                    {valid.map((e: any, i: number) => <p key={i}>{e.Title}</p>)}
-                                                    <button onClick={() => this.onButtonClick()}>Delete Users</button>
+                                                <div className="massDeleteUsers">
+                                                    <button className="btn-flat" onClick={() => this.onButtonClick()}>Delete Users</button>
+                                                    {valid.map((e: any, i: number) => (
+                                                        <div className="row">
+                                                            <div className="col s3 offset-s4">
+                                                                <span key={i}>{e.Title}</span>
+                                                            </div>
+                                                            <div className="col s1">
+                                                                <i
+                                                                    className="material-icons Remove"
+                                                                    onClick={(event) => this.removeFromValid(event.target)}
+                                                                    id={`i`}
+                                                                >
+                                                                    remove_circle_outline
+                                                                </i>
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             :
                                             <div className="ready" onClick={() => this.onReadyClick()}>
@@ -122,7 +145,9 @@ class MassUserDeleteStage extends React.Component<any, any> {
                     <div className="col s5 offset-s1">
                         <h5>Invalid users</h5>
                         {invalid.length > 0 ?
-                            invalid.map((e: any, i: number) => <p key={i}>{e}</p>)
+                            <div className="massDeleteUsers">
+                                {invalid.map((e: any, i: number) => <p key={i}>{e}</p>)}
+                            </div>
                             :
                             <div />
                         }

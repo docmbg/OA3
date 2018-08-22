@@ -93,8 +93,8 @@ export default class StructurePage extends React.Component<any, any> {
                         </select>
                     </div>
                 </div>
-                <button onClick={() => this.drawStructure()}> Draw </button>
-                <button onClick={() => this.getPng()}> Export to PNG </button>
+                <button className="btn-flat" onClick={() => this.drawStructure()}> Draw </button>
+                <button className="btn-flat" onClick={() => this.getPng()}> Export to PNG </button>
                 <div id="diagramContainer">
                     <div id="diagram" className="diagram" />
                 </div>

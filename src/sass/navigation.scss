@@ -16,8 +16,7 @@
     color: black;
   }
 }
-
-li {
+li.tooltipped {
   border: 2px solid #ffdd00;
     border-radius: 2em;
     padding: 5px;
@@ -31,6 +30,10 @@ li {
       font-size:2.5em;
       color: white;
     }
+  }
+
+.material-icons {
+  cursor: pointer;
 }
 
 h4 {
@@ -167,6 +170,22 @@ p {
      background-color: black;
    }
 
+   .btn-flat {
+    background: black;
+    color: #ffdd00;
+    &:hover {
+      background: #ffdd00!important;
+      color: black!important;
+      
+    }
+    height: 3em;
+    line-height: 3em;
+   }
+   .btn-floating:hover {
+    i{
+    color:black!important;
+    }
+   }
    .btn, .btn-large {
     height: 5em;
     background: black;
@@ -177,3 +196,8 @@ p {
       
     }
    }
+   li{
+   .btn.btn-floating {
+     height: 40px!important;
+   }
+  }

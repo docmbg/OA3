@@ -86,34 +86,47 @@ class EmptyFolderStage extends React.Component<any, any> {
                                     {this.props.emptyFolders.loading || this.props.foldersDeleted.loading ?
                                         <LinearLoader /> :
                                         <div>
-                                            <div onClick={() => this.onGetButtonClick()}>
-                                                <a className="waves-effect waves-black btn">
-                                                    <p className="download">
-                                                        GET EMPTY FOLDERS
-                                            <i className="material-icons">save_alt</i>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                            <form action="#">
-                                                <div className="file-field input-field">
-                                                    <div className="btn">
-                                                        <span>File</span>
-                                                        <input 
-                                                            onChange={(e) => this.onFileUpload(e.target.files)} 
-                                                            type="file" 
-                                                        />
-                                                    </div>
-                                                    <div className="file-path-wrapper">
-                                                        <input className="file-path validate" type="text" />
-                                                    </div>
+                                            <div className="row">
+                                                <div onClick={() => this.onGetButtonClick()}>
+                                                    <a className="waves-effect waves-black btn">
+                                                        <p className="download">
+                                                            GET EMPTY FOLDERS
+                                                            <i className="material-icons">save_alt</i>
+                                                        </p>
+                                                    </a>
                                                 </div>
-                                            </form>
-
+                                            </div>
+                                            <div className="row">
+                                                <form action="#">
+                                                    <div className="file-field input-field col s4 offset-s4">
+                                                        <div className="btn">
+                                                            <span>File</span>
+                                                            <input
+                                                                onChange={(e) => this.onFileUpload(e.target.files)}
+                                                                type="file"
+                                                                placeholder="Upload CSV"
+                                                            />
+                                                        </div>
+                                                        <div className="file-path-wrapper">
+                                                            <input className="file-path validate" type="text" />
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
                                             {this.state.urls.length === 0 ?
-                                                <div />
+                                                <button
+                                                    disabled={true}
+                                                    className="btn-flat"
+                                                    onClick={
+                                                        () => this.onDeleteButtonClick()
+                                                    }
+                                                >
+                                                    Delete Empty Folders
+                                                </button>
                                                 :
                                                 !this.props.foldersDeleted.hasOwnProperty('data') ?
                                                     <button
+                                                        className="btn-flat"
                                                         onClick={
                                                             () => this.onDeleteButtonClick()
                                                         }

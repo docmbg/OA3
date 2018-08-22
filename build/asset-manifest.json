@@ -1,8 +1,16 @@
 {
-  "main.css": "static/css/main.d396bec8.css",
-  "main.css.map": "static/css/main.d396bec8.css.map",
-  "main.js": "static/js/main.d4c1a050.js",
-  "main.js.map": "static/js/main.d4c1a050.js.map",
+  "main.css": "static/css/main.be8fdd9c.css",
+  "main.css.map": "static/css/main.be8fdd9c.css.map",
+  "main.js": "static/js/main.5ef83752.js",
+  "main.js.map": "static/js/main.5ef83752.js.map",
+  "static\\media\\addremove.JPG": "static/media/addremove.073a82bf.JPG",
   "static\\media\\bdlogo.jpg": "static/media/bdlogo.4306b6ad.jpg",
-  "static\\media\\top_banner.svg": "static/media/top_banner.a6efc282.svg"
+  "static\\media\\copy.JPG": "static/media/copy.7b4d4d06.JPG",
+  "static\\media\\email.JPG": "static/media/email.32ea9da4.JPG",
+  "static\\media\\pastecancel.JPG": "static/media/pastecancel.229cc27f.JPG",
+  "static\\media\\removeusers.JPG": "static/media/removeusers.f406ce01.JPG",
+  "static\\media\\structure.JPG": "static/media/structure.6e474776.JPG",
+  "static\\media\\top_banner.svg": "static/media/top_banner.a6efc282.svg",
+  "static\\media\\usergroups.JPG": "static/media/usergroups.13f52754.JPG",
+  "static\\media\\users.JPG": "static/media/users.51a9a55b.JPG"
 }

@@ -41,7 +41,7 @@ class StructureStage extends React.Component<any, any> {
             localStorage.setItem('sites', JSON.stringify(this.props.structure.data));
         }
         return (
-            <div>
+            <div className="container">
                 {this.props.users.length !== 0 ?
                     (
                         <div>

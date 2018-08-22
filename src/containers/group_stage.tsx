@@ -37,30 +37,34 @@ class GroupStage extends React.Component<any, any> {
         let text = groups.includes(this.props.groupId) ?
             (
                 <i
-                    className="material-icons"
+                    className="material-icons Remove"
                     onClick={(e) => this.addRemoveToGroup('Remove')}
-                    id="Remove"
                 >
                     remove_circle_outline
                 </i>
             ) :
             (
                 <i
-                    className="material-icons"
+                    className="material-icons Add"
                     onClick={(e) => this.addRemoveToGroup('Add')}
-                    id="Add"
                 >
                     add_circle_outline
                 </i>
             );
         return (
-            <div>
-                <span>{this.props.title}</span>
-                {
-                    this.props.currentUser.hasOwnProperty('user') ?
-                        text :
-                        <div />
-                }
+            <div className="col s12">
+                <div className="row delimiter">
+                    <div className="col s10 groups">
+                        <span>{this.props.title}</span>
+                    </div>
+                    <div className="col s1">
+                        {
+                            this.props.currentUser.hasOwnProperty('user') ?
+                                text :
+                                <div />
+                        }
+                    </div>
+                </div>
             </div>
         );
     }

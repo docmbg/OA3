@@ -9,23 +9,25 @@ import GroupStage from '../containers/group_stage';
 export default class GroupComponent extends React.Component<any, any> {
     render() {
         return (
+
             <ExpansionPanel>
                 <ExpansionPanelSummary>
-                    <Typography >{this.props.header}</Typography>
+                    <Typography ><p className="siteTitle">{this.props.header}</p></Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography>
-                        {
-                            this.props.groups.map((e: Object) => {
-                                return (
+                            <Typography>
+                                {
+                                    this.props.groups.map((e: Object) => {
+                                        return (
 
-                                    <GroupStage key={e[`Title`]} groupId={e[`Id`]} title={e[`Title`]} />
-                                );
-                            })
-                        }
-                    </Typography>
+                                            <GroupStage key={e[`Title`]} groupId={e[`Id`]} title={e[`Title`]} />
+                                        );
+                                    })
+                                }
+                            </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
+
         );
     }
 }

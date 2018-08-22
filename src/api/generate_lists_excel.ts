@@ -3,7 +3,7 @@ import { siteUrl } from '../consts';
 import { convertNumber } from './helperFunctions';
 
 export function generateExcelListsInformation(data: any) {
-    let columns = ['Title', 'Versioning Enabled', 'Location', 'Column Types', 'Existing Workflows'];
+    let columns = ['Title', 'Type', 'Items Count', 'Versioning Enabled', 'Location', 'Column Types', 'Existing Workflows'];
     const siteName = siteUrl.split('/')[siteUrl.split('/').length - 1];
     XlsxPopulate.fromBlankAsync()
         .then((workbook: any) => {
@@ -24,6 +24,12 @@ export function generateExcelListsInformation(data: any) {
                     switch (key) {
                         case 'Title':
                             sheet.cell(cell).value(item[key]);
+                            break;
+                        case 'Type':
+                            sheet.cell(cell).value(item[`BaseTemplate`] === 101 ? 'Library' : 'List');
+                            break;
+                        case 'Items Count':
+                            sheet.cell(cell).value(item.ItemCount);
                             break;
                         case 'Versioning Enabled':
                             sheet.cell(cell).value(item.EnableVersioning);

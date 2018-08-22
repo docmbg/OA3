@@ -8,7 +8,7 @@ import { generateExcelListsInformation } from '../api/generate_lists_excel';
 import { generateExcelWorkflows } from '../api/generate_workflows_excel';
 import { generateEmptyFoldersExcel } from '../api/generate_empty_folders_excel';
 import { updateUserGroups } from '../actions/update_user_groups';
-import UpdateCopiedPermissions from '../actions/update_copied_permissions';
+// import UpdateCopiedPermissions from '../actions/update_copied_permissions';
 import WorkerCurrentUserGroups from 'worker-loader!./currentUserGroups.ts';
 import WorkerPastePermissions from 'worker-loader!./pastePermissions.ts';
 import WorkerGenerateEmptyFolders from 'worker-loader!./generateEmptyFolders.ts';
@@ -100,7 +100,6 @@ export const customPromiseMiddleware = (store: any) => (next: any) => (action: a
                     _requestDigest: action.payload[`_requestDigest`],
                     user: action.payload.currentUser
                 }));
-                store.dispatch(UpdateCopiedPermissions([]));
             };
             break;
 

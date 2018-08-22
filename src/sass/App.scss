@@ -109,3 +109,80 @@ select {
     font-size: 1.1em;
   }
 }
+
+.info{
+  position: absolute;
+  color: white;
+  top: 1px;
+  left: 1px;
+  z-index: 100;
+  font-size: 3em;
+  cursor: pointer;
+}
+
+.birthdayPepe {
+  margin-left:33%;
+  width: 35%;
+}
+
+.massDeleteUsers {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 40em;
+  p {
+    font-size: 1em;
+  }
+}
+
+.file-field input.file-path {
+  border-bottom: 1px solid black!important;
+  box-shadow: 0 1px 0 0 black!important;
+}
+
+.input-field{
+  margin-top: 0rem!important;
+}
+.prefix {
+  line-height: 1.5em;
+}
+.prefix.active{
+  color:#2196f3!important;
+}
+.siteTitle {
+  font-weight: 600;
+  font-size: 1em;
+}
+.Add {
+  color:#2196f3;
+  cursor: pointer;
+}
+.Remove {
+  color:#f44336;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.groups {
+  text-align: left;
+}
+.col.s6 > img{
+  width:100%;
+}
+.delimiter {
+  border-bottom: inset;
+}
+input:focus{
+  border-bottom: 1px solid #2196f3!important;
+    box-shadow: 0 1px 0 0 #2196f3!important;
+}
+.jss49 {
+  font-size: 1em!important;
+}
+.jss3{
+  color: $dxc-yellow!important;
+  font-size: 1em!important;
+  background: black!important;
+}
+
+.card-content>p{
+  font-size: 1em!important;
+}

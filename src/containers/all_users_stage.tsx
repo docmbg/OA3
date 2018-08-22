@@ -29,7 +29,6 @@ class AllUsersStage extends React.Component<any, any> {
                     this.state.loaded ?
                         <div>
                             <div onClick={() => generateExcelUsers(this.props.users)}>
-                                <i className="material-icons">save_alt</i>
                                 <div onClick={() => this.onButtonClick()}>
                                         <a className="waves-effect waves-black btn">
                                             <p className="download">
